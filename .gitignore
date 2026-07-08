@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+
+# Logs
+logs/
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Build
+dist/
+
+# Coverage
+coverage/
+
+# Temporary Files
+temp/
+tmp/
+
+# Runtime Data
+pids/
+*.pid
+
+# npm
+npm-debug.log*
+
+# Yarn
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+*.local
