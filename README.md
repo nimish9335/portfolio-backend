@@ -384,20 +384,40 @@ No feature will be left incomplete before moving to the next one.
 
 # 🚀 Week 1
 
-## ✅ Day 1
+## ✅ Day 1 (Completed)
 
-Project Initialization
+### Completed Tasks
 
-- Create Repository
-- Initialize Node Project
-- Install Dependencies
-- Create Folder Structure
-- Environment Variables
-- Express Server
+- Repository Initialization
+- Professional Project Structure
+- Node.js Project Setup
+- Express Configuration
 - MongoDB Connection
-- Global Error Handler
+- Environment Variables
 - Base Middleware
+- Health Check Route
+- Development Dependencies
+- Professional Folder Structure
 
+### Learning Outcomes
+
+- Express Project Architecture
+- app.js vs server.js
+- Middleware Basics
+- Environment Variables
+- MongoDB Connection using Mongoose
+- Clean Folder Structure
+- Professional Git Workflow
+
+### Commit
+
+```bash
+chore: initialize backend architecture and configure Express server
+```
+
+Status
+
+✅ Completed
 ---
 
 ## ✅ Day 2
