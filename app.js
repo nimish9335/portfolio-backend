@@ -3,6 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
 const cookieParser = require("cookie-parser");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -21,5 +22,7 @@ app.get("/", (req, res) => {
         message: "Portfolio Backend API is running 🚀",
     });
 });
+
+app.use("/api/auth", authRoutes);
 
 module.exports = app;

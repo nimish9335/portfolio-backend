@@ -59,8 +59,6 @@ userSchema.pre("save", async function (next) {
 
     // Password hash karo
     this.password = await bcrypt.hash(this.password, 10);
-
-    next();
 });
 
 userSchema.methods.comparePassword = async function (enteredPassword) {

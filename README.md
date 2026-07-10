@@ -308,60 +308,155 @@ Status: ✅ Completed
 
 ------------------------------------------------------------------------
 
-# 📈 Progress
+# ✅ Day 3 (Completed)
 
--   [x] Project Setup
--   [x] Authentication Foundation
--   [ ] Authentication APIs
--   [ ] Utilities
--   [ ] Validation
--   [ ] Projects
--   [ ] Skills
--   [ ] Education
--   [ ] Experience
--   [ ] Certifications
--   [ ] Testimonials
--   [ ] Resume
--   [ ] Social Links
--   [ ] Blogs
--   [ ] Contact
--   [ ] Analytics
--   [ ] Dashboard
--   [ ] Security
--   [ ] Optimization
--   [ ] Testing
--   [ ] Deployment
+## Objective
+
+Implement secure authentication APIs for the portfolio backend using JWT and HTTP Only Cookies.
+
+## Completed
+
+- Admin Seed Script
+- Login API
+- Logout API
+- Current User API
+- Authentication Middleware
+- Protected Routes
+- Cookie Based Authentication
+- Postman Testing
+
+## Files
+
+```text
+controllers/authController.js
+routes/authRoutes.js
+middleware/authMiddleware.js
+scripts/seedAdmin.js
+```
+
+## Concepts Learned
+
+- Authentication Flow
+- JWT Verification
+- Cookie Authentication
+- Protected Routes
+- Middleware
+- Request Lifecycle
+- HTTP Status Codes
+
+## APIs
+
+```text
+POST   /api/auth/login
+
+POST   /api/auth/logout
+
+GET    /api/auth/me
+```
+
+## Interview Questions
+
+- Why use JWT?
+- Why HTTP Only Cookies?
+- Why Authentication Middleware?
+- Why attach user to req.user?
+- Difference between Authentication and Authorization?
+- Difference between 401 and 403?
+
+## Notes
+
+The backend now supports secure admin authentication. Only authenticated admins can access protected APIs.
+
+### Commit
+
+```bash
+feat(auth): implement authentication APIs with JWT middleware and protected routes
+```
+
+Status: ✅ Completed
 
 ------------------------------------------------------------------------
+
+# 📈 Progress
+
+* [x] Project Setup
+* [x] Authentication Foundation
+* [x] Authentication APIs
+* [ ] Utilities
+* [ ] Validation
+* [ ] Projects
+* [ ] Skills
+* [ ] Education
+* [ ] Experience
+* [ ] Certifications
+* [ ] Testimonials
+* [ ] Resume
+* [ ] Social Links
+* [ ] Blogs
+* [ ] Contact
+* [ ] Analytics
+* [ ] Dashboard
+* [ ] Security
+* [ ] Optimization
+* [ ] Testing
+* [ ] Deployment
+
+---
 
 # 🤖 Continue Development
 
 Current Status
 
-``` text
-Day 2 Completed
+```text
+Day 3 Completed
 ```
 
 Next Task
 
-``` text
-Day 3 - Authentication APIs
+```text
+Day 4 - Utilities
 ```
 
 Implementation Order
 
-1.  Admin Seed Script
-2.  Authentication Routes
-3.  Authentication Controller
-4.  Login API
-5.  Logout API
-6.  Current User API
-7.  Authentication Middleware
-8.  Protected Routes
-9.  Postman Testing
-10. README Update
-11. Git Commit
-12. Git Push
+1. Async Handler Utility
+2. Custom Error Class
+3. Global Error Handler
+4. API Response Utility
+5. Slug Generator Utility
+6. Cloudinary Utility
+7. Email Utility
+8. Logger Utility
+9. Utility Integration
+10. Utility Testing
+11. README Update
+12. Git Commit
+13. Git Push
+
+---
+
+## 🎯 Upcoming Milestone
+
+Day 4 focuses on building reusable utilities that will be shared across every module of the backend, ensuring clean, scalable, and production-ready code.
+
+Every utility will follow the project workflow:
+
+```text
+Theory
+   ↓
+Architecture
+   ↓
+Implementation
+   ↓
+Testing
+   ↓
+README Update
+   ↓
+Git Commit
+   ↓
+Git Push
+```
+
 
 ## Development Rules
 
