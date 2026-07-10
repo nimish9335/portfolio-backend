@@ -503,29 +503,6 @@ Status: ✅ Completed
 
 ---
 
-## 🎯 Upcoming Milestone
-
-Day 4 focuses on building reusable utilities that will be shared across every module of the backend, ensuring clean, scalable, and production-ready code.
-
-Every utility will follow the project workflow:
-
-```text
-Theory
-   ↓
-Architecture
-   ↓
-Implementation
-   ↓
-Testing
-   ↓
-README Update
-   ↓
-Git Commit
-   ↓
-Git Push
-```
-
-
 ## Development Rules
 
 -   Never skip theory before implementation.
