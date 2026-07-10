@@ -1,72 +1,62 @@
 const User = require("../models/User");
 const cookieOptions = require("../config/cookie");
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/ApiError");
+const ApiResponse = require("../utils/ApiResponse");
 
-const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+const login = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
 
-        // Check required fields
-        if (!email || !password) {
-            return res.status(400).json({
-                success: false,
-                message: "Email and Password are required.",
-            });
-        }
-
-        // Find user
-        const user = await User.findOne({ email }).select("+password");
-
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "Invalid credentials.",
-            });
-        }
-
-        // Compare password
-        const isMatch = await user.comparePassword(password);
-
-        if (!isMatch) {
-            return res.status(401).json({
-                success: false,
-                message: "Invalid credentials.",
-            });
-        }
-
-        // Generate Token
-        const token = user.generateJWT();
-
-        // Send Cookie
-        res.cookie("token", token, cookieOptions);
-
-        return res.status(200).json({
-            success: true,
-            message: "Login Successful.",
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: error.message,
-        });
+    if (!email || !password) {
+        throw new ApiError(400, "Email and Password are required.");
     }
-};
 
-const logout = async (req, res) => {
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+        throw new ApiError(401, "Invalid credentials.");
+    }
+
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+        throw new ApiError(401, "Invalid credentials.");
+    }
+
+    const token = user.generateJWT();
+
+    res.cookie("token", token, cookieOptions);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            null,
+            "Login Successful."
+        )
+    );
+});
+
+const logout = asyncHandler(async (req, res) => {
     res.clearCookie("token");
 
-    return res.status(200).json({
-        success: true,
-        message: "Logged out successfully.",
-    });
-};
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            null,
+            "Logged out successfully."
+        )
+    );
+});
 
-const getCurrentUser = async (req, res) => {
-    return res.status(200).json({
-        success: true,
-        user: req.user,
-    });
-};
+const getCurrentUser = asyncHandler(async (req, res) => {
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            req.user,
+            "Current user fetched successfully."
+        )
+    );
+});
 
 module.exports = {
     login,

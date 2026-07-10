@@ -377,12 +377,112 @@ Status: ✅ Completed
 
 ------------------------------------------------------------------------
 
+# ✅ Day 4 (Completed)
+
+## Objective
+
+Build reusable utilities and services to create a clean, scalable, and production-ready backend architecture.
+
+## Completed
+
+* Async Handler Utility
+* Custom API Error Class
+* Global Error Handler
+* API Response Utility
+* Logger Utility
+* Cloudinary Service
+* Email Service
+* Controller Refactoring
+* Centralized Error Handling
+* Standardized API Responses
+
+## Files
+
+```text
+utils/
+    asyncHandler.js
+    ApiError.js
+    ApiResponse.js
+    logger.js
+
+middleware/
+    errorHandler.js
+
+services/
+    cloudinary.js
+    email.js
+```
+
+## Concepts Learned
+
+* DRY (Don't Repeat Yourself)
+* Separation of Concerns
+* Utility Layer
+* Service Layer
+* Global Error Handling
+* Express Error Middleware
+* Custom Error Classes
+* Standard API Responses
+* Centralized Logging
+* Third-Party Service Integration
+
+## Architecture
+
+```text
+Client
+   │
+   ▼
+Routes
+   │
+   ▼
+Controllers
+   │
+   ├────────► Utilities
+   │             ├── asyncHandler
+   │             ├── ApiError
+   │             ├── ApiResponse
+   │             └── Logger
+   │
+   ├────────► Services
+   │             ├── Cloudinary
+   │             └── Email
+   │
+   ▼
+Database
+```
+
+## Interview Questions
+
+* What is the difference between a Utility and a Service?
+* Why use asyncHandler?
+* Why create a custom Error class?
+* Why use a Global Error Handler?
+* Why standardize API responses?
+* Why centralize logging?
+* Why configure Cloudinary and Nodemailer separately?
+* What is Separation of Concerns?
+* What is the DRY principle?
+
+## Notes
+
+Day 4 focused on building the core infrastructure of the backend. Instead of adding new business features, reusable utilities and services were introduced to improve code quality, maintainability, and scalability. These components will be reused throughout future modules such as Projects, Skills, Blogs, Resume, and Contact.
+
+### Commit
+
+```bash
+refactor(core): add reusable utilities, services, logger and global error handling
+```
+
+Status: ✅ Completed
+
+------------------------------------------------------------------------
+
 # 📈 Progress
 
 * [x] Project Setup
 * [x] Authentication Foundation
 * [x] Authentication APIs
-* [ ] Utilities
+* [x] Utilities
 * [ ] Validation
 * [ ] Projects
 * [ ] Skills
