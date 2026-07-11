@@ -7,10 +7,6 @@ const ApiResponse = require("../utils/ApiResponse");
 const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-        throw new ApiError(400, "Email and Password are required.");
-    }
-
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {

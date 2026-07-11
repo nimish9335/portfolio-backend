@@ -477,13 +477,147 @@ Status: ✅ Completed
 
 ------------------------------------------------------------------------
 
+# ✅ Day 5 (Completed)
+
+## Objective
+
+Build a centralized validation layer to validate incoming requests before they reach the controllers, ensuring clean, secure, and maintainable APIs.
+
+## Completed
+
+- Installed Express Validator
+- Created Validation Folder Structure
+- Built Global Validation Middleware
+- Created Common Validators
+- Created Authentication Validator
+- Created Project Validator
+- Added Reusable ObjectId Validation
+- Integrated Validation with Authentication Routes
+- Improved API Error Handling
+- Standardized Validation Error Responses
+- Refactored Authentication Controller
+
+## Files
+
+```text
+validators/
+    authValidator.js
+    commonValidator.js
+    projectValidator.js
+
+middleware/
+    validate.js
+
+utils/
+    ApiError.js
+
+middleware/
+    errorHandler.js
+
+routes/
+    authRoutes.js
+
+controllers/
+    authController.js
+```
+
+## Concepts Learned
+
+- Express Validator
+- Request Validation
+- Middleware Chaining
+- Validation Pipeline
+- Custom Validators
+- ObjectId Validation
+- Route-Level Validation
+- Global Validation Middleware
+- Standardized Error Handling
+- Separation of Concerns
+
+## Architecture
+
+```text
+Client
+   │
+   ▼
+Routes
+   │
+   ▼
+Validation Rules
+   │
+   ▼
+Validate Middleware
+   │
+   ├────────► Validation Error
+   │               │
+   │               ▼
+   │        Global Error Handler
+   │
+   ▼
+Controller
+   │
+   ▼
+Database
+```
+
+## Validation Flow
+
+```text
+Incoming Request
+        │
+        ▼
+Validation Rules
+        │
+        ▼
+validate.js
+        │
+ ┌──────┴────────┐
+ │               │
+ ▼               ▼
+Validation     Controller
+Error
+ │
+ ▼
+Global Error Handler
+ │
+ ▼
+400 Response
+```
+
+## Interview Questions
+
+- What is request validation?
+- Why should validation happen before controllers?
+- What is express-validator?
+- Difference between validation and sanitization?
+- What is middleware chaining?
+- Why use reusable validators?
+- What is `.bail()` in express-validator?
+- Why validate MongoDB ObjectIds?
+- Why should controllers contain only business logic?
+- What is the difference between schema validation and request validation?
+
+## Notes
+
+Day 5 focused on building a reusable validation layer using **express-validator**. Validation logic was separated from controllers and moved into dedicated validator files, making the application more modular and maintainable. A centralized validation middleware was introduced to provide consistent error handling, reusable validation rules were created for authentication and future project APIs, and the authentication controller was refactored to contain only business logic.
+
+### Commit
+
+```bash
+feat(validation): implement centralized validation layer with reusable validators and middleware
+```
+
+Status: ✅ Completed
+
+------------------------------------------------------------------------
+
 # 📈 Progress
 
 * [x] Project Setup
 * [x] Authentication Foundation
 * [x] Authentication APIs
 * [x] Utilities
-* [ ] Validation
+* [x] Validation
 * [ ] Projects
 * [ ] Skills
 * [ ] Education
