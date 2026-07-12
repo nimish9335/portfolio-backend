@@ -736,6 +736,159 @@ Status: ✅ Completed
 
 ------------------------------------------------------------------------
 
+------------------------------------------------------------------------
+
+# ✅ Day 7 (Completed)
+
+## Objective
+
+Build a complete image management system for the Projects module by integrating Multer and Cloudinary, enabling secure image uploads, updates, and deletions while storing only image metadata in MongoDB.
+
+## Completed
+
+- Installed Multer
+- Configured Multer Memory Storage
+- Added File Type Validation
+- Added File Size Validation
+- Extended Cloudinary Service
+- Implemented Cloudinary Upload using Streams
+- Built Thumbnail Upload for Create Project API
+- Updated Project Schema to Store Thumbnail Metadata
+- Implemented Thumbnail Replacement during Project Update
+- Deleted Cloudinary Images during Project Deletion
+- Protected Upload Routes
+- Completed Postman Testing
+
+## Files
+
+```text
+middleware/
+    upload.js
+
+services/
+    cloudinary.js
+
+controllers/
+    projectController.js
+
+models/
+    Project.js
+
+routes/
+    projectRoutes.js
+
+validators/
+    projectValidator.js
+```
+
+## Concepts Learned
+
+- Multipart Form Data
+- Multer Middleware
+- Memory Storage
+- File Validation
+- MIME Types
+- Cloudinary Upload Stream
+- Buffers and Streams
+- Cloudinary Image Management
+- Image Metadata
+- Cloudinary Public ID
+- Image Replacement Strategy
+- File Upload Security
+- Separation of File Storage and Database
+
+## Architecture
+
+```text
+Client
+   │
+   ▼
+Authentication
+   │
+   ▼
+Multer Middleware
+   │
+   ▼
+File Validation
+   │
+   ▼
+Cloudinary Upload
+   │
+   ▼
+Controller
+   │
+   ▼
+MongoDB
+```
+
+## Upload Flow
+
+```text
+Browser
+   │
+   ▼
+multipart/form-data
+   │
+   ▼
+Multer
+   │
+   ▼
+Memory Buffer
+   │
+   ▼
+Cloudinary Upload Stream
+   │
+   ▼
+Cloudinary
+   │
+   ▼
+secure_url
+public_id
+   │
+   ▼
+MongoDB
+```
+
+## APIs
+
+```text
+POST      /api/projects
+GET       /api/projects
+GET       /api/projects/:id
+PUT       /api/projects/:id
+DELETE    /api/projects/:id
+```
+
+## Interview Questions
+
+- Why can't Express handle file uploads by default?
+- What is multipart/form-data?
+- What is Multer?
+- What is the difference between memoryStorage() and diskStorage()?
+- Why use Cloudinary instead of storing images in MongoDB?
+- What is a Buffer in Node.js?
+- What is a Stream in Node.js?
+- Why use upload_stream()?
+- Why store Cloudinary public_id?
+- Why delete old images before uploading new ones?
+- What is upload.single()?
+- Why validate MIME types?
+- Why limit upload file size?
+
+## Notes
+
+Day 7 focused on building a production-ready image management system for the Projects module. Multer was configured to handle multipart form data using memory storage, uploaded files were streamed directly to Cloudinary, and only the image URL and public ID were stored in MongoDB. The Create, Update, and Delete APIs were enhanced to manage Cloudinary assets automatically, ensuring there are no orphaned images and keeping cloud storage synchronized with the database.
+
+### Commit
+
+```bash
+feat(projects): integrate Multer and Cloudinary for secure image upload and management
+```
+
+Status: ✅ Completed
+
+------------------------------------------------------------------------
+
 # 📈 Progress
 
 * [x] Project Setup

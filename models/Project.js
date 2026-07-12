@@ -35,15 +35,22 @@ const projectSchema = new mongoose.Schema(
         },
 
         thumbnail: {
-            public_id: {
-                type: String,
-                default: "",
-            },
             url: {
                 type: String,
-                default: "",
+                required: true,
+            },
+            public_id: {
+                type: String,
+                required: true,
             },
         },
+
+        gallery: [
+            {
+                url: String,
+                public_id: String,
+            },
+        ],
 
         featured: {
             type: Boolean,

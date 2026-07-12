@@ -18,21 +18,21 @@ const createProjectValidator = [
         .withMessage("Description must be at least 20 characters"),
 
     body("techStack")
-        .isArray({ min: 1 })
-        .withMessage("Tech stack must contain at least one technology"),
+        .notEmpty()
+        .withMessage("Tech stack is required"),
 
     body("githubUrl")
-        .optional()
+        .optional({ values: "falsy" })
         .isURL()
         .withMessage("GitHub URL must be valid"),
 
     body("liveUrl")
-        .optional()
+        .optional({ values: "falsy" })
         .isURL()
         .withMessage("Live URL must be valid"),
 
     body("featured")
-        .optional()
+        .optional({ values: "falsy" })
         .isBoolean()
         .withMessage("Featured must be a boolean"),
 ];
