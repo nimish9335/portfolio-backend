@@ -888,7 +888,77 @@ feat(projects): integrate Multer and Cloudinary for secure image upload and mana
 Status: ✅ Completed
 
 ------------------------------------------------------------------------
+# ✅ Day 8 (Completed)
 
+## Objective
+
+Build a complete Skills module with secure CRUD APIs, image upload support, request validation, authentication, and separate public/admin endpoints.
+
+## Completed
+
+* Designed Skill Schema
+* Created Skill Model
+* Built Create Skill API
+* Built Get Public Skills API
+* Built Get Admin Skills API
+* Built Update Skill API
+* Built Delete Skill API
+* Integrated Cloudinary Icon Upload
+* Implemented Icon Replacement
+* Added Request Validation
+* Protected Admin Routes
+* Completed Postman Testing
+
+## Files
+
+```text
+models/
+    Skill.js
+
+controllers/
+    skillController.js
+
+routes/
+    skillRoutes.js
+
+validators/
+    skillValidator.js
+```
+
+## Concepts Learned
+
+* CRUD Operations
+* REST API Design
+* Cloudinary Integration
+* Multer File Upload
+* Request Validation
+* Route Protection
+* Public vs Protected APIs
+* Image Management
+
+## APIs
+
+```text
+POST      /api/skills
+GET       /api/skills
+GET       /api/skills/admin
+PUT       /api/skills/:id
+DELETE    /api/skills/:id
+```
+
+## Notes
+
+Day 8 focused on building a production-ready Skills module. Administrators can securely manage skills with full CRUD functionality and Cloudinary-based icon uploads, while visitors can access only active skills through public APIs. The module follows the existing MVC architecture and reuses the authentication, validation, and upload infrastructure built in previous days.
+
+### Commit
+
+```bash
+feat(skills): implement complete skills management module with Cloudinary integration
+```
+
+Status: ✅ Completed
+
+------------------------------------------------------------------------
 # 📈 Progress
 
 * [x] Project Setup
@@ -897,7 +967,7 @@ Status: ✅ Completed
 * [x] Utilities
 * [x] Validation
 * [x] Projects
-* [ ] Skills
+* [x] Skills
 * [ ] Education
 * [ ] Experience
 * [ ] Certifications
