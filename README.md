@@ -1630,6 +1630,118 @@ feat(social-links): implement complete social links management module with CRUD 
 Status: ✅ Completed
 
 ------------------------------------------------------------------------
+
+# ✅ Day 15 (Completed)
+
+## Objective
+
+Build a centralized Settings module using the Singleton pattern to manage global portfolio configuration through secure REST APIs with separate public and admin endpoints.
+
+## Completed
+
+- Designed Setting Schema
+- Created Setting Model
+- Built Create Settings API
+- Built Get Public Settings API
+- Built Get Admin Settings API
+- Built Update Settings API
+- Built Delete Settings API
+- Implemented Singleton Pattern
+- Added Request Validation
+- Added Email Validation
+- Added Phone Number Validation
+- Protected Admin Routes
+- Added ObjectId Validation
+- Completed Postman Testing
+
+## Files
+
+```text
+models/
+    Setting.js
+
+controllers/
+    settingController.js
+
+routes/
+    settingRoutes.js
+
+validators/
+    settingValidator.js
+```
+
+## Concepts Learned
+
+- Singleton Pattern
+- Global Configuration Management
+- CRUD Operations
+- REST API Design
+- Request Validation
+- Email Validation
+- Phone Number Validation
+- Route Protection
+- Public vs Protected APIs
+- ObjectId Validation
+- Separation of Concerns
+
+## APIs
+
+```text
+POST      /api/settings
+GET       /api/settings
+GET       /api/settings/admin
+PUT       /api/settings/:id
+DELETE    /api/settings/:id
+```
+
+## Architecture
+
+```text
+Client
+   │
+   ▼
+Routes
+   │
+   ▼
+Authentication
+   │
+   ▼
+Validation Rules
+   │
+   ▼
+Validate Middleware
+   │
+   ▼
+Controller
+   │
+   ▼
+Setting Model
+   │
+   ▼
+MongoDB
+```
+
+## Interview Questions
+
+- What is the Singleton Pattern?
+- Why should only one settings document exist?
+- Why store application settings in the database?
+- Why separate public and admin APIs?
+- Why validate email and phone number before saving?
+- Why should validation happen before controllers?
+
+## Notes
+
+Day 15 focused on building a production-ready Settings module that acts as the centralized configuration system for the portfolio. The module follows the Singleton pattern to ensure only one settings document exists in the database. Secure CRUD operations, reusable validation, protected admin routes, and public APIs were implemented following the project's reusable MVC architecture.
+
+### Commit
+
+```bash
+feat(settings): implement singleton settings management module with CRUD APIs and validation
+```
+
+Status: ✅ Completed
+------------------------------------------------------------------------
 # 📈 Progress
 
 * [x] Project Setup
@@ -1645,6 +1757,7 @@ Status: ✅ Completed
 * [x] Testimonials
 * [x] Resume
 * [x] Social Links
+* [x] Settings
 * [ ] Blogs
 * [ ] Contact
 * [ ] Analytics
