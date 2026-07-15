@@ -1292,6 +1292,118 @@ feat(certifications): implement complete certifications management module with C
 
 Status: ✅ Completed
 ------------------------------------------------------------------------
+# ✅ Day 12 (Completed)
+
+## Objective
+
+Build a complete Testimonials module with secure CRUD APIs, request validation, authentication, and separate public/admin endpoints.
+
+## Completed
+
+- Designed Testimonial Schema
+- Created Testimonial Model
+- Built Create Testimonial API
+- Built Get Public Testimonials API
+- Built Get Admin Testimonials API
+- Built Get Testimonial By ID API
+- Built Update Testimonial API
+- Built Delete Testimonial API
+- Added Request Validation
+- Protected Admin Routes
+- Added ObjectId Validation
+- Implemented Rating Validation
+- Implemented Sorting by Order
+- Completed Postman Testing
+
+## Files
+
+```text
+models/
+    Testimonial.js
+
+controllers/
+    testimonialController.js
+
+routes/
+    testimonialRoutes.js
+
+validators/
+    testimonialValidator.js
+```
+
+## Concepts Learned
+
+- CRUD Operations
+- REST API Design
+- Mongoose Schema Design
+- Request Validation
+- Route Protection
+- Public vs Protected APIs
+- Numeric Range Validation
+- Boolean Validation
+- ObjectId Validation
+- Query Sorting
+- Separation of Concerns
+
+## APIs
+
+```text
+POST      /api/testimonials
+GET       /api/testimonials
+GET       /api/testimonials/admin
+GET       /api/testimonials/:id
+PUT       /api/testimonials/:id
+DELETE    /api/testimonials/:id
+```
+
+## Architecture
+
+```text
+Client
+   │
+   ▼
+Routes
+   │
+   ▼
+Authentication
+   │
+   ▼
+Validation Rules
+   │
+   ▼
+Validate Middleware
+   │
+   ▼
+Controller
+   │
+   ▼
+Testimonial Model
+   │
+   ▼
+MongoDB
+```
+
+## Interview Questions
+
+- Why validate rating at both the validator and schema level?
+- Why separate public and admin APIs?
+- Why validate ObjectIds before querying MongoDB?
+- Why use `lean()` for read operations?
+- Why use `runValidators: true` while updating?
+- Why should controllers contain only business logic?
+
+## Notes
+
+Day 12 focused on building a production-ready Testimonials module. The module supports secure CRUD operations, reusable request validation, protected admin endpoints, and public APIs for displaying testimonials. Rating validation was implemented at both the request and schema levels to ensure data integrity, while the overall architecture continues to follow the reusable MVC pattern established throughout the project.
+
+### Commit
+
+```bash
+feat(testimonials): implement complete testimonials management module with CRUD APIs and validation
+```
+
+Status: ✅ Completed
+------------------------------------------------------------------------
 # 📈 Progress
 
 * [x] Project Setup
@@ -1304,7 +1416,7 @@ Status: ✅ Completed
 * [x] Education
 * [x] Experience
 * [x] Certifications
-* [ ] Testimonials
+* [x] Testimonials
 * [ ] Resume
 * [ ] Social Links
 * [ ] Blogs
