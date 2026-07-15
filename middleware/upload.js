@@ -3,27 +3,43 @@ const ApiError = require("../utils/ApiError");
 
 const storage = multer.memoryStorage();
 
-const fileFilter = (req, file, cb) => {
-    const allowedMimeTypes = [
+const createUpload = ({
+    allowedMimeTypes,
+    maxFileSize = 5 * 1024 * 1024,
+    errorMessage,
+}) => {
+    return multer({
+        storage,
+        limits: {
+            fileSize: maxFileSize,
+        },
+        fileFilter: (req, file, cb) => {
+            if (allowedMimeTypes.includes(file.mimetype)) {
+                return cb(null, true);
+            }
+
+            cb(new ApiError(400, errorMessage));
+        },
+    });
+};
+
+const imageUpload = createUpload({
+    allowedMimeTypes: [
         "image/jpeg",
         "image/jpg",
         "image/png",
         "image/webp",
-    ];
-
-    if (allowedMimeTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(new ApiError(400, "Only JPG, JPEG, PNG and WEBP images are allowed."));
-    }
-};
-
-const upload = multer({
-    storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024,
-    },
-    fileFilter,
+    ],
+    errorMessage: "Only JPG, JPEG, PNG and WEBP images are allowed.",
 });
 
-module.exports = upload;
+const pdfUpload = createUpload({
+    allowedMimeTypes: ["application/pdf"],
+    maxFileSize: 10 * 1024 * 1024,
+    errorMessage: "Only PDF files are allowed.",
+});
+
+module.exports = {
+    imageUpload,
+    pdfUpload,
+};

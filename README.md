@@ -1404,6 +1404,119 @@ feat(testimonials): implement complete testimonials management module with CRUD 
 
 Status: ✅ Completed
 ------------------------------------------------------------------------
+# ✅ Day 13 (Completed)
+
+## Objective
+
+Build a complete Resume module with secure PDF upload, Cloudinary integration, request validation, authentication, and public/admin APIs.
+
+## Completed
+
+- Designed Resume Schema
+- Created Resume Model
+- Built Upload Resume API
+- Built Get Active Resume API
+- Built Update Resume API
+- Built Delete Resume API
+- Integrated PDF Upload using Multer
+- Integrated Cloudinary Raw File Upload
+- Implemented Resume Replacement
+- Deleted Old Resume from Cloudinary
+- Added Request Validation
+- Protected Admin Routes
+- Added ObjectId Validation
+- Implemented Resume Versioning
+- Completed Postman Testing
+
+## Files
+
+```text
+models/
+    Resume.js
+
+controllers/
+    resumeController.js
+
+routes/
+    resumeRoutes.js
+
+validators/
+    resumeValidator.js
+
+middleware/
+    upload.js
+```
+
+## Concepts Learned
+
+- PDF Upload using Multer
+- Cloudinary Raw File Upload
+- File Metadata Storage
+- Resume Versioning
+- Cloudinary File Management
+- Request Validation
+- Route Protection
+- Public vs Protected APIs
+- ObjectId Validation
+- Separation of Concerns
+
+## APIs
+
+```text
+POST      /api/resume
+GET       /api/resume
+PUT       /api/resume/:id
+DELETE    /api/resume/:id
+```
+
+## Architecture
+
+```text
+Client
+   │
+   ▼
+Authentication
+   │
+   ▼
+Multer Middleware
+   │
+   ▼
+Validation Rules
+   │
+   ▼
+Validate Middleware
+   │
+   ▼
+Resume Controller
+   │
+   ├────────► Cloudinary (PDF)
+   │
+   ▼
+MongoDB
+```
+
+## Interview Questions
+
+- Why use `resource_type: "raw"` for PDF uploads in Cloudinary?
+- Why store only the file URL and public ID in MongoDB?
+- Why keep only one active resume?
+- Why delete the old resume before uploading a new one?
+- What is the purpose of resume versioning?
+- Why separate file storage from database storage?
+- Why validate requests before reaching the controller?
+
+## Notes
+
+Day 13 focused on building a production-ready Resume module. Administrators can securely upload, update, and delete PDF resumes, while visitors can access the latest active resume through a public API. The module integrates Multer for file uploads, Cloudinary for PDF storage, automatic replacement of old files, version tracking, reusable validation, and protected admin routes, following the reusable MVC architecture established throughout the project.
+
+### Commit
+
+```bash
+feat(resume): implement complete resume management module with PDF upload and Cloudinary integration
+```
+
+Status: ✅ Completed
+------------------------------------------------------------------------
 # 📈 Progress
 
 * [x] Project Setup
@@ -1417,7 +1530,7 @@ Status: ✅ Completed
 * [x] Experience
 * [x] Certifications
 * [x] Testimonials
-* [ ] Resume
+* [x] Resume
 * [ ] Social Links
 * [ ] Blogs
 * [ ] Contact
