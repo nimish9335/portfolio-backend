@@ -9,6 +9,7 @@ const errorHandler = require("./middleware/errorHandler");
 const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const skillRoutes = require("./routes/skillRoutes");
+const educationRoutes = require("./routes/educationRoutes");
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/skills", skillRoutes);
+app.use("/api/education", educationRoutes);
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);
