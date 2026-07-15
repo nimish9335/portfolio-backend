@@ -1180,6 +1180,118 @@ feat(experience): implement complete experience management module with CRUD APIs
 
 Status: ✅ Completed
 ------------------------------------------------------------------------
+# ✅ Day 11 (Completed)
+
+## Objective
+
+Build a complete Certifications module with secure CRUD APIs, request validation, authentication, and separate public/admin endpoints.
+
+## Completed
+
+- Designed Certification Schema
+- Created Certification Model
+- Built Create Certification API
+- Built Get Public Certifications API
+- Built Get Admin Certifications API
+- Built Get Certification By ID API
+- Built Update Certification API
+- Built Delete Certification API
+- Added Request Validation
+- Added Credential URL Validation
+- Protected Admin Routes
+- Added ObjectId Validation
+- Implemented Sorting by Order
+- Completed Postman Testing
+
+## Files
+
+```text
+models/
+    Certification.js
+
+controllers/
+    certificationController.js
+
+routes/
+    certificationRoutes.js
+
+validators/
+    certificationValidator.js
+```
+
+## Concepts Learned
+
+- CRUD Operations
+- REST API Design
+- Mongoose Schema Design
+- Route Protection
+- Request Validation
+- URL Validation
+- Array Validation
+- Public vs Protected APIs
+- ObjectId Validation
+- Query Sorting
+- Separation of Concerns
+
+## APIs
+
+```text
+POST      /api/certifications
+GET       /api/certifications
+GET       /api/certifications/admin
+GET       /api/certifications/:id
+PUT       /api/certifications/:id
+DELETE    /api/certifications/:id
+```
+
+## Architecture
+
+```text
+Client
+   │
+   ▼
+Routes
+   │
+   ▼
+Authentication
+   │
+   ▼
+Validation Rules
+   │
+   ▼
+Validate Middleware
+   │
+   ▼
+Controller
+   │
+   ▼
+Certification Model
+   │
+   ▼
+MongoDB
+```
+
+## Interview Questions
+
+- Why validate URLs before storing them?
+- Why use arrays for skills?
+- Why separate public and admin APIs?
+- Why validate ObjectIds before database queries?
+- Why use `lean()` in read APIs?
+- Why should validation happen before controllers?
+
+## Notes
+
+Day 11 focused on building a production-ready Certifications module. The module supports secure CRUD operations, reusable validation, credential URL validation, protected admin endpoints, and public APIs for displaying certifications on the portfolio. It follows the existing MVC architecture and reuses the authentication, validation, and error handling infrastructure built in earlier modules.
+
+### Commit
+
+```bash
+feat(certifications): implement complete certifications management module with CRUD APIs and validation
+```
+
+Status: ✅ Completed
+------------------------------------------------------------------------
 # 📈 Progress
 
 * [x] Project Setup
@@ -1191,7 +1303,7 @@ Status: ✅ Completed
 * [x] Skills
 * [x] Education
 * [x] Experience
-* [ ] Certifications
+* [x] Certifications
 * [ ] Testimonials
 * [ ] Resume
 * [ ] Social Links
