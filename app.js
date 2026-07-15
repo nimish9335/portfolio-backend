@@ -10,6 +10,7 @@ const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const skillRoutes = require("./routes/skillRoutes");
 const educationRoutes = require("./routes/educationRoutes");
+const experienceRoutes = require("./routes/experienceRoutes");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/education", educationRoutes);
+app.use("/api/experience", experienceRoutes);
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);
