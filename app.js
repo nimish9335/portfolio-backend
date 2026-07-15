@@ -14,6 +14,7 @@ const experienceRoutes = require("./routes/experienceRoutes");
 const certificationRoutes = require("./routes/certificationRoutes");
 const testimonialRoutes = require("./routes/testimonialRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
+const socialLinkRoutes = require("./routes/socialLinkRoutes");
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use("/api/experience", experienceRoutes);
 app.use("/api/certifications", certificationRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/resume", resumeRoutes);
+app.use("/api/social-links", socialLinkRoutes);
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);

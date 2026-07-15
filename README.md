@@ -1517,6 +1517,119 @@ feat(resume): implement complete resume management module with PDF upload and Cl
 
 Status: ✅ Completed
 ------------------------------------------------------------------------
+
+# ✅ Day 14 (Completed)
+
+## Objective
+
+Build a complete Social Links module with secure CRUD APIs, request validation, authentication, and separate public/admin endpoints for managing portfolio social profiles.
+
+## Completed
+
+- Designed Social Link Schema
+- Created Social Link Model
+- Built Create Social Link API
+- Built Get Public Social Links API
+- Built Get Admin Social Links API
+- Built Get Social Link By ID API
+- Built Update Social Link API
+- Built Delete Social Link API
+- Added Request Validation
+- Added URL Validation
+- Protected Admin Routes
+- Added ObjectId Validation
+- Implemented Sorting by Order
+- Completed Postman Testing
+
+## Files
+
+```text
+models/
+    SocialLink.js
+
+controllers/
+    socialLinkController.js
+
+routes/
+    socialLinkRoutes.js
+
+validators/
+    socialLinkValidator.js
+```
+
+## Concepts Learned
+
+- CRUD Operations
+- REST API Design
+- URL Validation
+- Request Validation
+- Route Protection
+- Public vs Protected APIs
+- ObjectId Validation
+- Query Sorting
+- Mongoose Indexing
+- Separation of Concerns
+
+## APIs
+
+```text
+POST      /api/social-links
+GET       /api/social-links
+GET       /api/social-links/admin
+GET       /api/social-links/:id
+PUT       /api/social-links/:id
+DELETE    /api/social-links/:id
+```
+
+## Architecture
+
+```text
+Client
+   │
+   ▼
+Routes
+   │
+   ▼
+Authentication
+   │
+   ▼
+Validation Rules
+   │
+   ▼
+Validate Middleware
+   │
+   ▼
+Controller
+   │
+   ▼
+SocialLink Model
+   │
+   ▼
+MongoDB
+```
+
+## Interview Questions
+
+- Why validate URLs before storing them?
+- Why separate public and admin APIs?
+- Why use an `order` field?
+- Why use an `isActive` field?
+- Why create indexes on frequently queried fields?
+- Why should validation happen before controllers?
+
+## Notes
+
+Day 14 focused on building a production-ready Social Links module. The module allows administrators to manage portfolio social profiles through secure CRUD APIs, while visitors can access only active links via public endpoints. URL validation, request validation, protected admin routes, sorting, and reusable MVC architecture were implemented to ensure scalability and maintainability.
+
+### Commit
+
+```bash
+feat(social-links): implement complete social links management module with CRUD APIs and validation
+```
+
+Status: ✅ Completed
+
+------------------------------------------------------------------------
 # 📈 Progress
 
 * [x] Project Setup
@@ -1531,7 +1644,7 @@ Status: ✅ Completed
 * [x] Certifications
 * [x] Testimonials
 * [x] Resume
-* [ ] Social Links
+* [x] Social Links
 * [ ] Blogs
 * [ ] Contact
 * [ ] Analytics
