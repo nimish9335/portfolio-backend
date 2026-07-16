@@ -1742,6 +1742,140 @@ feat(settings): implement singleton settings management module with CRUD APIs an
 
 Status: ✅ Completed
 ------------------------------------------------------------------------
+# ✅ Day 16 (Completed)
+
+## Objective
+
+Build a complete Blogs module with secure CRUD APIs, featured image upload, Cloudinary integration, request validation, authentication, SEO support, and separate public/admin endpoints.
+
+## Completed
+
+- Designed Blog Schema
+- Created Blog Model
+- Built Create Blog API
+- Built Get Public Blogs API
+- Built Get Admin Blogs API
+- Built Get Blog By Slug API
+- Built Update Blog API
+- Built Delete Blog API
+- Integrated Featured Image Upload
+- Added Cloudinary Image Management
+- Implemented Slug-based Routing
+- Implemented Search using Text Index
+- Added Category Filtering
+- Added Tag Filtering
+- Implemented Pagination
+- Added Read Time Calculation
+- Added View Counter
+- Added SEO Fields
+- Added Draft/Published Status
+- Protected Admin Routes
+- Added Request Validation
+- Completed Postman Testing
+
+## Files
+
+```text
+models/
+    Blog.js
+
+controllers/
+    blogController.js
+
+routes/
+    blogRoutes.js
+
+validators/
+    blogValidator.js
+```
+
+## Concepts Learned
+
+- CRUD Operations
+- REST API Design
+- Blog Management System
+- Slug-based Routing
+- MongoDB Text Index
+- Search Implementation
+- Pagination
+- Category & Tag Filtering
+- Cloudinary Image Upload
+- Multer File Upload
+- Read Time Calculation
+- View Counter
+- SEO Metadata
+- Public vs Protected APIs
+- Request Validation
+- Route Protection
+- Separation of Concerns
+
+## APIs
+
+```text
+POST      /api/blogs
+GET       /api/blogs
+GET       /api/blogs/admin/all
+GET       /api/blogs/:slug
+PUT       /api/blogs/:id
+DELETE    /api/blogs/:id
+```
+
+## Architecture
+
+```text
+Client
+   │
+   ▼
+Routes
+   │
+   ▼
+Authentication
+   │
+   ▼
+Validation Rules
+   │
+   ▼
+Validate Middleware
+   │
+   ▼
+Controller
+   │
+   ├────────► Cloudinary
+   │
+   ▼
+Blog Model
+   │
+   ▼
+MongoDB
+```
+
+## Interview Questions
+
+- Why use slugs instead of MongoDB ObjectIds in URLs?
+- What is a MongoDB text index?
+- How does text search work in MongoDB?
+- Why implement pagination in REST APIs?
+- Why store tags as an array?
+- Why separate public and admin blog APIs?
+- Why calculate read time automatically?
+- Why maintain a view counter?
+- Why store SEO metadata in the database?
+- Why upload images to Cloudinary instead of MongoDB?
+- Why validate requests before controllers?
+- Why should controllers only contain business logic?
+
+## Notes
+
+Day 16 focused on building a production-ready Blogs module. The module provides secure CRUD operations with featured image uploads using Cloudinary, slug-based routing, search, pagination, category and tag filtering, SEO metadata, automatic read time calculation, and view tracking. Public APIs expose only published blogs, while administrators can manage both published and draft content through protected endpoints, following the reusable MVC architecture established throughout the project.
+
+### Commit
+
+```bash
+feat(blogs): implement complete blog management module with CRUD APIs, search, pagination and Cloudinary integration
+```
+
+Status: ✅ Completed
+------------------------------------------------------------------------
 # 📈 Progress
 
 * [x] Project Setup
@@ -1758,7 +1892,7 @@ Status: ✅ Completed
 * [x] Resume
 * [x] Social Links
 * [x] Settings
-* [ ] Blogs
+* [x] Blogs
 * [ ] Contact
 * [ ] Analytics
 * [ ] Dashboard
