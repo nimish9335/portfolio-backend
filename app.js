@@ -18,6 +18,7 @@ const socialLinkRoutes = require("./routes/socialLinkRoutes");
 const settingRoutes = require("./routes/settingRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const inboxRoutes = require("./routes/inboxRoutes");
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use("/api/social-links", socialLinkRoutes);
 app.use("/api/settings", settingRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/inbox", inboxRoutes);
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);

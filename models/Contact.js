@@ -41,16 +41,32 @@ const contactSchema = new mongoose.Schema(
             type: Date,
             default: null,
         },
+
+        replied: {
+            type: Boolean,
+            default: false,
+            index: true,
+        },
+
+        repliedAt: {
+            type: Date,
+            default: null,
+        },
     },
     {
         timestamps: true,
     }
 );
 
+// Text Search Index
+contactSchema.index({
+    name: "text",
+    subject: "text",
+    message: "text",
+});
+
+// Query Optimization Indexes
 contactSchema.index({ createdAt: -1 });
-
 contactSchema.index({ email: 1 });
-
-contactSchema.index({ name: "text", subject: "text", message: "text" });
 
 module.exports = mongoose.model("Contact", contactSchema);

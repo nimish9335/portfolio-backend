@@ -103,13 +103,18 @@ const updateContact = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Message not found");
     }
 
-    const { status } = req.body;
+    const { status, replied } = req.body;
 
+    // Update Read Status
     if (status) {
         contact.status = status;
+        contact.readAt = status === "read" ? new Date() : null;
+    }
 
-        contact.readAt =
-            status === "read" ? new Date() : null;
+    // Update Reply Status
+    if (typeof replied === "boolean") {
+        contact.replied = replied;
+        contact.repliedAt = replied ? new Date() : null;
     }
 
     await contact.save();
