@@ -17,6 +17,7 @@ const resumeRoutes = require("./routes/resumeRoutes");
 const socialLinkRoutes = require("./routes/socialLinkRoutes");
 const settingRoutes = require("./routes/settingRoutes");
 const blogRoutes = require("./routes/blogRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use("/api/resume", resumeRoutes);
 app.use("/api/social-links", socialLinkRoutes);
 app.use("/api/settings", settingRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Global Error Handler (Always Last)
 app.use(errorHandler);

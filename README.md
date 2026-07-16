@@ -1876,6 +1876,123 @@ feat(blogs): implement complete blog management module with CRUD APIs, search, p
 
 Status: ✅ Completed
 ------------------------------------------------------------------------
+# ✅ Day 17 (Completed)
+
+## Objective
+
+Build a complete Contact module with secure contact form submission, request validation, message management, and separate public/admin APIs.
+
+## Completed
+
+- Designed Contact Schema
+- Created Contact Model
+- Built Submit Contact API
+- Built Get All Messages API
+- Built Get Message By ID API
+- Built Update Message Status API
+- Built Delete Message API
+- Added Email Validation
+- Added Request Validation
+- Implemented Read / Unread Status
+- Added Read Timestamp
+- Implemented Search
+- Added Pagination
+- Protected Admin Routes
+- Completed Postman Testing
+
+## Files
+
+```text
+models/
+    Contact.js
+
+controllers/
+    contactController.js
+
+routes/
+    contactRoutes.js
+
+validators/
+    contactValidator.js
+```
+
+## Concepts Learned
+
+- Contact Form Management
+- CRUD Operations
+- REST API Design
+- Request Validation
+- Email Validation
+- Route Protection
+- Public vs Protected APIs
+- Read / Unread Status
+- Search using MongoDB Text Index
+- Pagination
+- Query Filtering
+- Separation of Concerns
+
+## APIs
+
+```text
+POST      /api/contact
+GET       /api/contact
+GET       /api/contact/:id
+PUT       /api/contact/:id
+DELETE    /api/contact/:id
+```
+
+## Architecture
+
+```text
+Visitor
+   │
+   ▼
+Contact Form
+   │
+   ▼
+Validation Rules
+   │
+   ▼
+Validate Middleware
+   │
+   ▼
+Controller
+   │
+   ▼
+Contact Model
+   │
+   ▼
+MongoDB
+   │
+   ▼
+Admin Dashboard
+```
+
+## Interview Questions
+
+- Why should a contact form be publicly accessible but message management remain protected?
+- Why validate email addresses before saving them?
+- Why implement a read/unread status instead of deleting messages immediately?
+- Why use pagination when fetching messages?
+- How does MongoDB text search work?
+- Why use middleware for request validation?
+- What is the difference between authentication and authorization?
+- Why should controllers contain only business logic?
+- Why separate public and admin APIs?
+- Why use timestamps in MongoDB documents?
+
+## Notes
+
+Day 17 focused on building a production-ready Contact module for the portfolio backend. Visitors can securely submit messages through a public API, while administrators can manage messages using protected CRUD APIs. The module includes request validation, email validation, search, pagination, read/unread tracking, and follows the reusable MVC architecture established throughout the project.
+
+### Commit
+
+```bash
+feat(contact): implement complete contact management module with CRUD APIs, validation and admin message handling
+```
+
+Status: ✅ Completed
+------------------------------------------------------------------------
 # 📈 Progress
 
 * [x] Project Setup
@@ -1893,7 +2010,7 @@ Status: ✅ Completed
 * [x] Social Links
 * [x] Settings
 * [x] Blogs
-* [ ] Contact
+* [x] Contact
 * [ ] Analytics
 * [ ] Dashboard
 * [ ] Security
