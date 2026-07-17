@@ -2400,6 +2400,145 @@ feat(dashboard): build centralized admin dashboard with summary and recent activ
 Status: ✅ Completed
 
 ------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+# ✅ Day 21 (Completed)
+
+## Objective
+
+Harden the backend for production by implementing security best practices, request rate limiting, response compression, secure CORS configuration, environment-based settings, and performance optimizations.
+
+## Completed
+
+- Configured Helmet Security Headers
+- Implemented Route-specific Rate Limiting
+- Added Authentication Rate Limiter
+- Added Public API Rate Limiter
+- Added Admin API Rate Limiter
+- Configured Response Compression
+- Implemented HTTP Parameter Pollution (HPP) Protection
+- Added Morgan HTTP Request Logging
+- Configured Environment-based Logging
+- Centralized Security Configuration
+- Created Production-ready CORS Configuration
+- Added Environment Configuration Module
+- Configured Trust Proxy Support
+- Disabled Express X-Powered-By Header
+- Completed Security & Performance Testing
+
+## Files
+
+```text
+config/
+    security.js
+    cors.js
+    environment.js
+```
+
+## Concepts Learned
+
+- Express Security
+- Production Hardening
+- Helmet
+- HTTP Security Headers
+- Express Rate Limiting
+- Route-specific Rate Limiting
+- Compression Middleware
+- HTTP Parameter Pollution (HPP)
+- Morgan Logger
+- Production Logging
+- CORS Configuration
+- Environment Variables
+- NODE_ENV
+- Trust Proxy
+- Middleware Architecture
+- Performance Optimization
+- Secure Express Configuration
+
+## Architecture
+
+```text
+Incoming Request
+        │
+        ▼
+Helmet
+        │
+        ▼
+CORS
+        │
+        ▼
+Rate Limiter
+        │
+        ▼
+Compression
+        │
+        ▼
+HPP Protection
+        │
+        ▼
+Morgan (Development)
+        │
+        ▼
+Routes
+        │
+        ▼
+Response
+```
+
+## Security Flow
+
+```text
+Client Request
+      │
+      ▼
+Security Middleware
+      │
+      ├────────► Helmet
+      ├────────► CORS
+      ├────────► Rate Limiter
+      ├────────► Compression
+      ├────────► HPP Protection
+      └────────► Morgan Logger
+      │
+      ▼
+Application Routes
+      │
+      ▼
+Response
+```
+
+## Interview Questions
+
+- Why is Helmet used in Express applications?
+- What are HTTP Security Headers?
+- Why implement route-specific rate limiting?
+- How does rate limiting prevent brute-force attacks?
+- What is HTTP Parameter Pollution?
+- Why use compression middleware?
+- Why use Morgan only in development?
+- What is CORS and why should it be restricted?
+- What is the purpose of NODE_ENV?
+- Why use `app.set("trust proxy", 1)` in production?
+- Why disable the `X-Powered-By` header?
+- How do you secure an Express backend for production?
+
+## Notes
+
+Day 21 focused on preparing the backend for production deployment by implementing security and performance best practices. The application now includes Helmet for secure HTTP headers, route-specific rate limiting to protect against abuse, response compression for improved performance, HPP protection against malicious query parameters, environment-aware logging with Morgan, secure CORS configuration, centralized environment management, and production-specific Express settings such as disabling the X-Powered-By header and enabling trust proxy support. The middleware architecture remains modular and reusable while improving the application's security posture and scalability.
+
+### Important Note
+
+During implementation, `express-mongo-sanitize` was removed because it is currently incompatible with **Express 5.x** (it attempts to modify `req.query`, which is read-only in Express 5). The project continues using Express 5 with the remaining security middleware.
+
+### Commit
+
+```bash
+feat(security): implement production-ready security and performance optimizations
+```
+
+Status: ✅ Completed
+
+------------------------------------------------------------------------
 # 📈 Progress
 
 * [x] Project Setup
@@ -2420,7 +2559,7 @@ Status: ✅ Completed
 * [x] Contact
 * [x] Analytics
 * [x] Dashboard
-* [ ] Security
+* [x] Security
 * [ ] Optimization
 * [ ] Testing
 * [ ] Deployment
