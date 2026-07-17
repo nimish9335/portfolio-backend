@@ -22,6 +22,7 @@ const blogRoutes = require("./routes/blogRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const inboxRoutes = require("./routes/inboxRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const app = express();
 
@@ -53,7 +54,7 @@ app.use("/api/contact", trackVisitor, contactRoutes);
 
 // Admin routes (analytics track nahi karenge)
 app.use("/api/inbox", inboxRoutes);
-
+app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
 // Global Error Handler (Always Last)
