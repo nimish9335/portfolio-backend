@@ -38,8 +38,8 @@ const getAdminExperience = asyncHandler(async (req, res) => {
 const getExperienceById = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const experience = await Experience.findById(id);
-
+    const experience = await Experience.findById(id).lean();
+    
     if (!experience) {
         throw new ApiError(404, "Experience not found");
     }

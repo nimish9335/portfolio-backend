@@ -38,7 +38,7 @@ const getAdminTestimonials = asyncHandler(async (req, res) => {
 const getTestimonialById = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const testimonial = await Testimonial.findById(id);
+    const testimonial = await Testimonial.findById(id).lean();
 
     if (!testimonial) {
         throw new ApiError(404, "Testimonial not found");

@@ -26,6 +26,8 @@ const router = express.Router();
 
 router.get("/", getBlogs);
 
+router.get("/admin/all", protect, getAdminBlogs);
+
 router.get("/:slug", getBlogBySlug);
 
 /*
@@ -33,8 +35,6 @@ router.get("/:slug", getBlogBySlug);
 | Admin Routes
 |--------------------------------------------------------------------------
 */
-
-router.get("/admin/all", protect, getAdminBlogs);
 
 router.post(
     "/",

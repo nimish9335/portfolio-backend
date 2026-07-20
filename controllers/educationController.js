@@ -38,7 +38,7 @@ const getAdminEducation = asyncHandler(async (req, res) => {
 const getEducationById = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const education = await Education.findById(id);
+    const education = await Education.findById(id).lean();
 
     if (!education) {
         throw new ApiError(404, "Education not found");

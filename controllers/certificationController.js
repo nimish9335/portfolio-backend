@@ -38,7 +38,7 @@ const getAdminCertifications = asyncHandler(async (req, res) => {
 const getCertificationById = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const certification = await Certification.findById(id);
+    const certification = await Certification.findById(id).lean();
 
     if (!certification) {
         throw new ApiError(404, "Certification not found");

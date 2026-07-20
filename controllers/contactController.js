@@ -76,7 +76,7 @@ const getContacts = asyncHandler(async (req, res) => {
  * @access  Private (Admin)
  */
 const getContactById = asyncHandler(async (req, res) => {
-    const contact = await Contact.findById(req.params.id);
+    const contact = await Contact.findById(req.params.id).lean();
 
     if (!contact) {
         throw new ApiError(404, "Message not found");

@@ -12,12 +12,14 @@ const { getOverview,
 
 const router = express.Router();
 
-router.get("/overview", protect, getOverview);
-router.get("/pages", protect, getPageAnalytics);
-router.get("/devices", protect, getDeviceAnalytics);
-router.get("/browsers", protect, getBrowserAnalytics);
-router.get("/countries", protect, getCountryAnalytics);
-router.get("/os", protect, getOSAnalytics);
-router.get("/daily", protect, getDailyAnalytics);
+router.use(protect);
+
+router.get("/overview", getOverview);
+router.get("/pages", getPageAnalytics);
+router.get("/devices", getDeviceAnalytics);
+router.get("/browsers", getBrowserAnalytics);
+router.get("/countries", getCountryAnalytics);
+router.get("/os", getOSAnalytics);
+router.get("/daily", getDailyAnalytics);
 
 module.exports = router;

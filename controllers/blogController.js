@@ -124,7 +124,8 @@ const getBlogs = asyncHandler(async (req, res) => {
  */
 const getAdminBlogs = asyncHandler(async (req, res) => {
     const blogs = await Blog.find()
-        .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
 
     return res.json(
         new ApiResponse(
