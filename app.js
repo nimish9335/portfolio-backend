@@ -44,6 +44,14 @@ app.use(useragent.express());
 // Authentication
 app.use("/api/auth", authLimiter, authRoutes);
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Portfolio Backend API is running 🚀",
+    version: "1.0.0",
+  });
+});
+
 // Public APIs
 app.use("/api/projects", apiLimiter, trackVisitor, projectRoutes);
 app.use("/api/skills", apiLimiter, trackVisitor, skillRoutes);
