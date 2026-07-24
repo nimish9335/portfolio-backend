@@ -1,4 +1,4 @@
-# 🚀 Portfolio Backend CMS
+# 🚀 Portfolio Builder — Backend
 
 <p align="center">
   <img src="https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white" />
@@ -6,993 +6,499 @@
   <img src="https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
   <img src="https://img.shields.io/badge/JWT-Authentication-blue?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Cloudinary-Media%20Storage-3448C5?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Nodemailer-Email%20Service-green?style=for-the-badge" />
 </p>
 
 <p align="center">
-  <b>A Production-Ready Portfolio Backend CMS built with Node.js, Express.js, and MongoDB.</b>
+  <b>A Production-Ready Multi-User Portfolio Builder Backend built with Node.js, Express.js, and MongoDB.</b>
 </p>
 
 <p align="center">
-This backend powers a complete developer portfolio by providing secure authentication, portfolio management, blog management, contact handling, resume management, visitor analytics, and an admin dashboard through a scalable REST API.
+A complete backend platform that enables developers to create, manage, customize, publish, and monitor their own professional portfolio through secure REST APIs.
 </p>
 
 ---
 
 ## 📌 Project Overview
 
-Portfolio Backend CMS is a fully featured REST API designed to manage every aspect of a personal portfolio website from a centralized admin panel.
+**Portfolio Builder** is a production-oriented multi-user backend platform designed to allow developers to build and manage their own dynamic portfolios.
 
-Instead of hardcoding portfolio content into the frontend, this backend allows administrators to dynamically manage projects, skills, education, experience, certifications, blogs, testimonials, resumes, contact messages, and website settings.
+The project originally started as a **single-user Portfolio Backend CMS**, providing APIs for managing projects, skills, education, experience, certifications, testimonials, blogs, resumes, social links, website settings, contact messages, and visitor analytics.
 
-The application follows modern backend development practices including secure authentication, modular architecture, validation, centralized error handling, file uploads, analytics tracking, and production-ready security middleware.
+The original backend was successfully completed, tested, documented, and prepared for deployment. It is now being extended into a **Multi-User Portfolio Builder Platform**, where multiple users can each create an account and independently manage their own portfolio data.
+
+Every registered user can:
+
+* Create a secure account and manage a personal dashboard
+* Build a developer profile — projects, skills, education, experience
+* Manage certifications, testimonials, resume, social/coding profiles
+* Write and publish blogs
+* Customize portfolio settings, and publish/unpublish the portfolio
+* Receive contact messages + email notifications
+* Track visitor analytics for their own portfolio
+* Expose their portfolio at a unique public URL
+
+```text
+/portfolio/nimish-patel
+```
+
+Built with a modular **MVC architecture**, with authentication, authorization, validation, cloud media storage, analytics, centralized error handling, and production security practices.
 
 ---
 
-## 🎯 Objectives
+## 🧰 Tech Stack
 
-The primary goals of this project are:
+| Layer              | Technology                                  |
+| ------------------ | -------------------------------------------- |
+| Runtime             | Node.js (18+)                                |
+| Framework           | Express.js                                   |
+| Database            | MongoDB Atlas + Mongoose                     |
+| Authentication      | JWT (Access + Refresh Tokens), HTTP-only Cookies |
+| Password Security   | bcrypt                                       |
+| File/Media Storage  | Cloudinary + Multer                          |
+| Email Service       | Nodemailer                                   |
+| Validation          | express-validator / Zod                      |
+| Security            | Helmet, CORS, express-rate-limit, mongo-sanitize, xss-clean |
+| Logging             | Morgan / Winston                             |
+| API Testing         | Postman                                      |
+| Deployment          | Render / Vercel (API) + MongoDB Atlas        |
 
-- Build a scalable REST API using Express.js
-- Follow MVC Architecture for clean code organization
-- Implement secure JWT Authentication
-- Create reusable CRUD APIs for portfolio management
-- Support Cloudinary file uploads
-- Track visitor analytics
-- Build an admin dashboard backend
-- Apply production-grade security practices
-- Optimize database queries for performance
-- Prepare the backend for deployment
+---
+
+## 🎯 Project Objective
+
+The primary objective is to transform the existing production-ready Portfolio CMS into a scalable **Portfolio Builder Platform**, without unnecessarily rebuilding already-completed functionality.
+
+```text
+Existing Portfolio Backend CMS
+             │
+             ▼
+      Reuse Existing Code
+             │
+             ▼
+      Refactor Data Models
+             │
+             ▼
+    Add Multi-User Ownership
+             │
+             ▼
+      Add User Registration
+             │
+             ▼
+     Public Portfolio System
+             │
+             ▼
+   User-Specific Analytics
+             │
+             ▼
+Multi-User Portfolio Builder
+```
 
 ---
 
 ## ⭐ Key Highlights
 
-- Secure JWT Authentication
-- Role-Based Authorization
-- Portfolio Content Management
-- Blog Management System
-- Resume Upload & Management
-- Contact & Inbox Management
-- Visitor Analytics Dashboard
-- Cloudinary Media Storage
-- Global Error Handling
-- Input Validation
-- Security Middleware
-- Rate Limiting
-- Modular MVC Architecture
-- Production Ready REST APIs
-
-# ✨ Features
-
-The Portfolio Backend CMS provides a complete set of REST APIs to manage every section of a developer portfolio website.
-
----
-
-## 🔐 Authentication & Authorization
-
-- JWT Authentication
-- Secure HTTP-only Cookies
-- Password Hashing with bcrypt
-- Login & Logout
-- Protected Routes
-- Role-Based Access Control (Admin/User)
-- Authentication Middleware
+* Multi-User Portfolio Builder with strict data isolation
+* JWT Authentication (Access + Refresh Token flow)
+* HTTP-only Cookie Support
+* Password Hashing (bcrypt)
+* Portfolio Content Management (projects, skills, education, experience, certifications, testimonials)
+* Public Portfolio API via unique username
+* Publish / Unpublish Portfolio toggle
+* Blog Management System (draft/published, slugs, tags, reading time)
+* Resume Management (Cloudinary storage, auto-cleanup of old file)
+* Contact & Inbox Management + Nodemailer notifications
+* Visitor Analytics (device, browser, OS, country, page-level)
+* Personal User Dashboard with aggregated stats
+* Input Validation, Rate Limiting, Security Middleware
+* Centralized Error Handling
+* Modular MVC Architecture
+* MongoDB Query Optimization (indexes, lean queries)
+* Production-Ready REST APIs
 
 ---
 
-## 💼 Portfolio Management
-
-Manage every section of the portfolio dynamically without modifying frontend code.
-
-### Projects
-
-- Create Project
-- Update Project
-- Delete Project
-- Get All Projects
-- Get Featured Projects
-
-### Skills
-
-- Add Skills
-- Update Skills
-- Delete Skills
-- Skill Categories
-
-### Education
-
-- Academic Records
-- Degree Details
-- Institution Information
-
-### Experience
-
-- Company Details
-- Job Position
-- Employment Timeline
-
-### Certifications
-
-- Certificate Management
-- Credential Links
-- Issuing Organization
-
-### Testimonials
-
-- Client Testimonials
-- Ratings
-- Profile Images
-
----
-
-## 📝 Blog Management
-
-Complete blogging system including:
-
-- Create Blog
-- Update Blog
-- Delete Blog
-- Publish / Draft Status
-- Slug-Based URLs
-- Category Support
-- Tags
-- Featured Images
-- Reading Time
-- View Counter
-
----
-
-## 📄 Resume Management
-
-- Resume Upload
-- Resume Update
-- Resume Download
-- Cloudinary Storage
-- Previous Resume Replacement
-
----
-
-## 📞 Contact Management
-
-- Contact Form API
-- Store Messages
-- Mark as Read
-- Reply Status
-- Delete Messages
-
----
-
-## 📥 Inbox Management
-
-Admin APIs for:
-
-- Dashboard Overview
-- Recent Messages
-- Mark Single Read
-- Mark All Read
-- Bulk Delete
-- Message Statistics
-
----
-
-## 📊 Analytics Dashboard
-
-Track website visitors including:
-
-- Total Visitors
-- Page Views
-- Browser Statistics
-- Device Statistics
-- Operating System Analytics
-- Country Analytics
-- Daily Visitor Analytics
-
----
-
-## ⚙️ Website Settings
-
-Manage:
-
-- Website Title
-- Hero Section
-- About Information
-- Contact Details
-- SEO Settings
-- Social Media Links
-
----
-
-## ☁️ Cloudinary Integration
-
-- Image Upload
-- Resume Upload
-- Automatic File Replacement
-- Secure Media URLs
-
----
-
-## 📧 Email Support
-
-- Contact Notifications
-- SMTP Integration
-- Nodemailer Support
-
----
-
-# 🛠️ Tech Stack
-
-## Backend
-
-- Node.js
-- Express.js
-
-## Database
-
-- MongoDB Atlas
-- Mongoose ODM
-
-## Authentication
-
-- JSON Web Token (JWT)
-- bcryptjs
-- HTTP-only Cookies
-
-## File Storage
-
-- Cloudinary
-- Multer
-
-## Security
-
-- Helmet
-- CORS
-- Express Rate Limit
-- Mongo Sanitize
-- XSS Protection
-- Cookie Parser
-
-## Validation
-
-- Express Validator
-
-## Utilities
-
-- dotenv
-- Nodemailer
-- Slugify
-- Morgan (if used)
-- Express UserAgent
-
-## Development Tools
-
-- Postman
-- Git
-- GitHub
-- VS Code
-
-# 📂 Project Structure
-
-The project follows a clean and modular MVC (Model-View-Controller) architecture to ensure scalability, maintainability, and separation of concerns.
+## 📁 Suggested Folder Structure
 
 ```text
-portfolio-backend/
+portfolio-builder-backend/
 │
-├── config/                 # Database, Cloudinary, Security & CORS configuration
-├── controllers/            # Business logic for all modules
-├── middleware/             # Authentication, Validation & Error handling
-├── models/                 # Mongoose database models
-├── routes/                 # REST API routes
-├── scripts/                # Utility scripts (Admin Seeder)
-├── utils/                  # Helper functions
-├── validators/             # Request validation rules
+├── src/
+│   ├── config/
+│   │   ├── db.js
+│   │   ├── cloudinary.js
+│   │   └── mailer.js
+│   │
+│   ├── models/
+│   │   ├── user.model.js
+│   │   ├── project.model.js
+│   │   ├── skill.model.js
+│   │   ├── education.model.js
+│   │   ├── experience.model.js
+│   │   ├── certification.model.js
+│   │   ├── testimonial.model.js
+│   │   ├── blog.model.js
+│   │   ├── resume.model.js
+│   │   ├── socialLink.model.js
+│   │   ├── portfolioSettings.model.js
+│   │   ├── contactMessage.model.js
+│   │   └── analytics.model.js
+│   │
+│   ├── controllers/
+│   ├── routes/
+│   ├── middlewares/
+│   │   ├── auth.middleware.js
+│   │   ├── error.middleware.js
+│   │   ├── rateLimiter.middleware.js
+│   │   └── validate.middleware.js
+│   │
+│   ├── utils/
+│   │   ├── ApiError.js
+│   │   ├── ApiResponse.js
+│   │   ├── asyncHandler.js
+│   │   └── generateTokens.js
+│   │
+│   ├── validators/
+│   ├── app.js
+│   └── server.js
 │
-├── app.js                  # Express application configuration
-├── server.js               # Application entry point
+├── .env.example
+├── .gitignore
 ├── package.json
-├── README.md
-└── .env.example
+└── README.md
 ```
 
 ---
 
-# 🏗️ Architecture
-
-The backend follows a layered architecture to keep responsibilities well separated.
-
-```text
-                        Client Application
-                    (React / Next.js / Mobile)
-                               │
-                               │
-                        HTTP Requests
-                               │
-                               ▼
-                    Express Application
-                               │
-        ┌──────────────────────┼──────────────────────┐
-        │                      │                      │
-        ▼                      ▼                      ▼
- Security Middleware     Authentication        Validation
-                               │
-                               ▼
-                           API Routes
-                               │
-                               ▼
-                          Controllers
-                               │
-                               ▼
-                        Business Logic
-                               │
-                               ▼
-                          Mongoose ODM
-                               │
-                               ▼
-                         MongoDB Atlas
-                               │
-             ┌─────────────────┴──────────────────┐
-             │                                    │
-             ▼                                    ▼
-      Cloudinary Storage                 Email Service
-```
-
----
-
-# 🔄 Request Flow
-
-Every request passes through multiple layers before reaching the database.
-
-```text
-Client Request
-      │
-      ▼
-Express Server
-      │
-      ▼
-Security Middleware
-      │
-      ▼
-Authentication Middleware
-      │
-      ▼
-Validation Middleware
-      │
-      ▼
-Route Handler
-      │
-      ▼
-Controller
-      │
-      ▼
-Database
-      │
-      ▼
-JSON Response
-```
-
----
-
-# 🚀 Getting Started
-
-Follow the steps below to run the project locally.
-
-## 1️⃣ Clone Repository
-
-```bash
-git clone https://github.com/your-username/portfolio-backend.git
-
-cd portfolio-backend
-```
-
----
-
-## 2️⃣ Install Dependencies
-
-```bash
-npm install
-```
-
----
-
-## 3️⃣ Create Environment File
-
-Create a `.env` file in the root directory.
+## 🔑 Environment Variables (`.env.example`)
 
 ```env
 PORT=5000
-
-MONGO_URI=
-
-JWT_SECRET=
-JWT_EXPIRE=
-
-COOKIE_EXPIRE=
-
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
-
-EMAIL_HOST=
-EMAIL_PORT=
-EMAIL_USER=
-EMAIL_PASS=
-
-FRONTEND_URL=
-
 NODE_ENV=development
+
+MONGO_URI=your_mongodb_atlas_uri
+
+ACCESS_TOKEN_SECRET=your_access_secret
+ACCESS_TOKEN_EXPIRY=15m
+REFRESH_TOKEN_SECRET=your_refresh_secret
+REFRESH_TOKEN_EXPIRY=7d
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email
+SMTP_PASS=your_app_password
+
+CLIENT_URL=http://localhost:5173
 ```
 
 ---
 
-## 4️⃣ Seed Admin Account
+## 🏗️ Project Evolution
 
-```bash
-npm run seed
+### Phase 1 — Portfolio Backend CMS ✅ (Completed)
+
+Single-user CMS covering Auth, Projects, Skills, Education, Experience, Certifications, Testimonials, Blogs, Resume, Social Links, Website Settings, Contact/Inbox, Analytics, Dashboard, Cloudinary, Nodemailer, Security, and Performance optimizations.
+
+### 📊 Existing Backend Statistics (Pre-Upgrade)
+
+| Category          | Existing Implementation |
+| ------------------ | -----------------------: |
+| Modules            |                      15+ |
+| REST APIs          |                      60+ |
+| Controllers        |                      15+ |
+| Models             |                      13+ |
+| Route Modules      |                      15+ |
+| Security Features  |                       8+ |
+| Cloud Storage      |               Cloudinary |
+| Email Service      |               Nodemailer |
+| Database           |            MongoDB Atlas |
+| Architecture       |                      MVC |
+| Backend Status     |                Completed |
+
+---
+
+### Phase 2 — Portfolio Builder Upgrade 🔄
+
+```text
+BEFORE                          AFTER
+
+Admin                       Portfolio Builder
+  │                                 │
+  ▼                    ┌────────────┼────────────┐
+Single Portfolio        │            │            │
+  │                   User A       User B       User C
+  ├── Projects           │            │            │
+  ├── Skills             ▼            ▼            ▼
+  ├── Education      Portfolio A  Portfolio B  Portfolio C
+  ├── Experience
+  └── Other Content
 ```
 
 ---
 
-## 5️⃣ Run Development Server
+## 🧩 Multi-User Data Architecture
+
+```text
+User
+│
+├── Profile
+├── Projects
+├── Skills
+├── Education
+├── Experience
+├── Certifications
+├── Testimonials
+├── Resume
+├── Social Links
+├── Blogs
+├── Portfolio Settings
+├── Contact Messages
+└── Analytics
+```
+
+Every user-owned resource references its owner:
+
+```js
+user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    index: true
+}
+```
+
+This enforces strict data isolation:
+
+```js
+const projects = await Project.find({ user: req.user._id });
+```
+
+---
+
+## 🔐 Data Isolation Principle
+
+If User A (`_id = 101`) creates `Project A, B, C` and User B (`_id = 202`) creates `Project X, Y`, then `GET /api/projects` while authenticated as User A must **only** return Project A, B, C.
+
+User A must never be able to:
+
+* Read, update, or delete User B's resources
+* Access User B's inbox, dashboard, or private analytics
+
+This rule applies to **every** private route in the backend — enforced at the controller/query level, not just the route level.
+
+---
+
+## 🌐 Public vs Private APIs
+
+### 🔒 Private APIs (Authentication Required)
+
+```text
+# Auth
+POST   /api/auth/register
+POST   /api/auth/login
+POST   /api/auth/logout
+POST   /api/auth/refresh-token
+GET    /api/auth/me
+
+# Profile
+GET    /api/profile
+PUT    /api/profile
+
+# Projects
+GET    /api/projects
+POST   /api/projects
+PUT    /api/projects/:id
+DELETE /api/projects/:id
+
+# Skills / Education / Experience / Certifications / Testimonials
+GET    /api/skills            POST   /api/skills           ...
+GET    /api/education         POST   /api/education        ...
+GET    /api/experience        POST   /api/experience       ...
+GET    /api/certifications    POST   /api/certifications   ...
+GET    /api/testimonials      POST   /api/testimonials     ...
+
+# Resume
+POST   /api/resume/upload
+DELETE /api/resume
+
+# Social Links
+GET    /api/social-links
+PUT    /api/social-links
+
+# Blogs
+GET    /api/blogs
+POST   /api/blogs
+PUT    /api/blogs/:id
+DELETE /api/blogs/:id
+
+# Portfolio Settings
+GET    /api/settings
+PUT    /api/settings
+PATCH  /api/settings/publish
+
+# Inbox
+GET    /api/inbox
+PATCH  /api/inbox/:id/read
+PATCH  /api/inbox/read-all
+DELETE /api/inbox/:id
+
+# Analytics & Dashboard
+GET    /api/analytics/overview
+GET    /api/dashboard
+```
+
+### 🌍 Public APIs (No Authentication)
+
+```text
+GET  /api/portfolio/:username
+GET  /api/portfolio/:username/blogs
+GET  /api/portfolio/:username/blogs/:slug
+POST /api/portfolio/:username/contact
+POST /api/portfolio/:username/track-visit
+```
+
+`GET /api/portfolio/:username` returns only publicly visible data: Profile, Projects, Skills, Education, Experience, Certifications, Testimonials, Resume link, Social Links, Published Blogs, and Portfolio Settings. Private data (inbox, analytics, unpublished content) is **never** exposed here.
+
+---
+
+## 📦 Standard API Response Format
+
+Keeping one consistent shape across all APIs makes the frontend integration much easier.
+
+```json
+// Success
+{
+  "success": true,
+  "message": "Project created successfully",
+  "data": { }
+}
+
+// Error
+{
+  "success": false,
+  "message": "Project not found",
+  "errors": []
+}
+```
+
+Recommended: build small `ApiResponse` and `ApiError` utility classes + an `asyncHandler` wrapper so controllers stay clean and errors funnel into one centralized error-handling middleware.
+
+---
+
+## 🔄 Final Platform Flow
+
+```text
+                    New User
+                       │
+                       ▼
+                   Register → Login → User Dashboard
+                       │
+          ┌────────────┼─────────────────────────┐
+          ▼            ▼                          ▼
+       Profile      Projects/Skills/Education   Blogs/Settings
+                       │
+                       ▼
+               Publish Portfolio
+                       │
+                       ▼
+              Unique Public URL
+                       │
+                       ▼
+                    Visitors
+          ┌────────────┼────────────┐
+          ▼            ▼            ▼
+       Browse       Contact      Analytics tracked
+                       │
+                       ▼
+                Inbox + Nodemailer
+                       │
+                       ▼
+               Email Notification
+```
+
+---
+
+## 🗓️ Upgrade Plan (10 Days)
+
+| Day | Development Focus |
+| ---: | ------------------ |
+| Day 1 | Backend Audit + User Model + Registration |
+| Day 2 | Authentication (Access/Refresh) + Profile + Multi-User Foundation |
+| Day 3 | Projects + Skills + Education Migration to ownership model |
+| Day 4 | Experience + Certifications + Testimonials |
+| Day 5 | Resume + Social Links + Portfolio Settings |
+| Day 6 | Public Portfolio API + Publish/Unpublish System |
+| Day 7 | Contact + Inbox + Nodemailer |
+| Day 8 | Multi-User Blogs + Analytics |
+| Day 9 | Dashboard + Security Hardening + Query Optimization |
+| Day 10 | Complete Testing + Deployment + Documentation |
+
+---
+
+## 🚧 Development Strategy (Per Day)
+
+```text
+1. Inspect existing implementation
+2. Determine what can be reused
+3. Identify single-user assumptions
+4. Modify models (add `user` ownership field + index)
+5. Modify controllers (scope every query to req.user._id)
+6. Modify routes/middleware
+7. Add required new functionality
+8. Test using Postman (as User A, then User B — verify isolation)
+9. Perform multi-user security tests
+10. Commit stable implementation
+```
+
+**Important Rule:** Don't rebuild a module just because it's on the roadmap.
+
+```text
+If it already works:  Reuse → Modify → Test
+Not:                  Delete → Rebuild
+```
+
+---
+
+## 🧪 Testing Checklist (Per Module)
+
+* [ ] CRUD works for the authenticated user
+* [ ] User A cannot fetch/update/delete User B's data (403/404)
+* [ ] Public route returns only published/public fields
+* [ ] Validation rejects malformed input with proper error format
+* [ ] Rate limiter triggers on abuse endpoints (login, contact form)
+* [ ] File upload replaces old Cloudinary asset instead of leaking storage
+* [ ] JWT expiry + refresh token flow works end-to-end
+
+---
+
+## 🚀 Getting Started
 
 ```bash
+git clone <your-repo-url>
+cd portfolio-builder-backend
+npm install
+cp .env.example .env   # fill in your values
 npm run dev
 ```
 
 ---
 
-## 6️⃣ Production Server
+## 🔮 Future Enhancements (Post v1)
 
-```bash
-npm start
-```
-
----
-
-## 📌 Server URL
-
-```text
-http://localhost:5000
-```
+* Portfolio themes/templates selectable per user
+* Custom domain mapping for published portfolios
+* Team/collaborator access on a single portfolio
+* GitHub API auto-sync for projects
+* Redis caching for public portfolio reads
+* WebSocket-based real-time visitor count
+* Admin panel for platform-level moderation
 
 ---
 
-# 📦 Dependencies
+## 📜 License
 
-Major packages used in this project:
-
-- express
-- mongoose
-- jsonwebtoken
-- bcryptjs
-- cloudinary
-- multer
-- express-validator
-- helmet
-- cors
-- cookie-parser
-- express-rate-limit
-- express-mongo-sanitize
-- xss-clean
-- compression
-- dotenv
-- nodemailer
-
-# 📚 API Documentation
-
-The backend exposes a RESTful API for managing every aspect of the portfolio website.
-
-## 🔗 Base URL
-
-### Development
-
-```text
-http://localhost:5000/api
-```
-
-### Production
-
-```text
-https://your-domain.com/api
-```
-
----
-
-# 🔐 Authentication
-
-Most admin endpoints require authentication.
-
-Include the JWT token (or HTTP-only cookie depending on your implementation) before accessing protected APIs.
-
----
-
-# 📋 API Modules
-
-| Module | Description | Protected |
-|---------|-------------|-----------|
-| Authentication | Login, Logout, Current User | Partial |
-| Projects | Portfolio Projects Management | Admin for CRUD |
-| Skills | Skills Management | Admin for CRUD |
-| Education | Education Management | Admin for CRUD |
-| Experience | Experience Management | Admin for CRUD |
-| Certifications | Certification Management | Admin for CRUD |
-| Testimonials | Testimonial Management | Admin for CRUD |
-| Resume | Resume Upload & Management | Admin |
-| Social Links | Social Media Links | Admin for CRUD |
-| Settings | Website Settings | Admin |
-| Blogs | Blog Management | Admin for CRUD |
-| Contact | Contact Form | Public Submit |
-| Inbox | Message Management | Admin |
-| Analytics | Visitor Analytics | Admin |
-| Dashboard | Dashboard Statistics | Admin |
-
----
-
-# 📌 API Summary
-
-| Method | Purpose |
-|----------|----------|
-| GET | Retrieve Resources |
-| POST | Create Resources |
-| PUT | Update Resources |
-| DELETE | Delete Resources |
-
----
-
-# 📖 Endpoint Overview
-
-## Authentication
-
-| Method | Endpoint |
-|----------|-----------|
-| POST | `/auth/login` |
-| POST | `/auth/logout` |
-| GET | `/auth/me` |
-
----
-
-## Projects
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/projects` |
-| GET | `/projects/:id` |
-| POST | `/projects` |
-| PUT | `/projects/:id` |
-| DELETE | `/projects/:id` |
-
----
-
-## Skills
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/skills` |
-| POST | `/skills` |
-| PUT | `/skills/:id` |
-| DELETE | `/skills/:id` |
-
----
-
-## Education
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/education` |
-| POST | `/education` |
-| PUT | `/education/:id` |
-| DELETE | `/education/:id` |
-
----
-
-## Experience
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/experience` |
-| POST | `/experience` |
-| PUT | `/experience/:id` |
-| DELETE | `/experience/:id` |
-
----
-
-## Certifications
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/certifications` |
-| POST | `/certifications` |
-| PUT | `/certifications/:id` |
-| DELETE | `/certifications/:id` |
-
----
-
-## Testimonials
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/testimonials` |
-| POST | `/testimonials` |
-| PUT | `/testimonials/:id` |
-| DELETE | `/testimonials/:id` |
-
----
-
-## Resume
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/resume` |
-| POST | `/resume` |
-| DELETE | `/resume` |
-
----
-
-## Blogs
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/blogs` |
-| GET | `/blogs/:slug` |
-| GET | `/blogs/admin/all` |
-| POST | `/blogs` |
-| PUT | `/blogs/:id` |
-| DELETE | `/blogs/:id` |
-
----
-
-## Contact
-
-| Method | Endpoint |
-|----------|-----------|
-| POST | `/contact` |
-| GET | `/contact` |
-| GET | `/contact/:id` |
-| PUT | `/contact/:id` |
-| DELETE | `/contact/:id` |
-
----
-
-## Inbox
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/inbox/dashboard` |
-| GET | `/inbox/recent` |
-| PUT | `/inbox/read/:id` |
-| PUT | `/inbox/read-all` |
-| DELETE | `/inbox/:id` |
-
----
-
-## Analytics
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/analytics/overview` |
-| GET | `/analytics/daily` |
-| GET | `/analytics/browser` |
-| GET | `/analytics/device` |
-| GET | `/analytics/os` |
-| GET | `/analytics/country` |
-| GET | `/analytics/page` |
-
----
-
-## Dashboard
-
-| Method | Endpoint |
-|----------|-----------|
-| GET | `/dashboard` |
-
-
-# 🔧 Environment Variables
-
-Create a `.env` file in the project root and configure the following variables:
-
-| Variable | Description |
-|-----------|-------------|
-| `PORT` | Server Port |
-| `NODE_ENV` | Application Environment |
-| `MONGO_URI` | MongoDB Atlas Connection String |
-| `JWT_SECRET` | Secret Key for JWT Authentication |
-| `JWT_EXPIRE` | JWT Expiration Time |
-| `COOKIE_EXPIRE` | Cookie Expiration Time |
-| `FRONTEND_URL` | Frontend Application URL |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary Cloud Name |
-| `CLOUDINARY_API_KEY` | Cloudinary API Key |
-| `CLOUDINARY_API_SECRET` | Cloudinary API Secret |
-| `EMAIL_HOST` | SMTP Host |
-| `EMAIL_PORT` | SMTP Port |
-| `EMAIL_USER` | SMTP Email |
-| `EMAIL_PASS` | SMTP Password |
-
----
-
-# 🔒 Security Features
-
-This project follows modern backend security practices to protect APIs and user data.
-
-### Authentication
-
-- JWT Authentication
-- HTTP-only Cookies
-- Protected Routes
-- Role-Based Authorization
-
-### API Security
-
-- Helmet Security Headers
-- CORS Configuration
-- Rate Limiting
-- MongoDB Query Sanitization
-- XSS Protection
-- Input Validation
-- Secure Cookie Handling
-
-### Password Security
-
-- bcrypt Password Hashing
-- Salted Password Storage
-
-### Request Protection
-
-- Global Error Handler
-- Centralized Validation
-- Invalid Route Handling
-- Secure Environment Variables
-
----
-
-# ⚡ Performance Optimizations
-
-Several optimizations have been implemented to improve backend performance and scalability.
-
-### Database Optimization
-
-- Optimized Mongoose Queries
-- `lean()` for Read-only Operations
-- Indexed Database Fields
-- Efficient Query Design
-
-### Backend Optimization
-
-- Modular MVC Architecture
-- Reusable Controllers
-- Centralized Middleware
-- Optimized Route Structure
-- Async Error Handling
-
-### Media Optimization
-
-- Cloudinary Storage
-- Automatic File Replacement
-- Optimized Image URLs
-
-### Production Readiness
-
-- Environment-Based Configuration
-- Security Middleware
-- Structured Logging
-- Clean Error Responses
-
----
-
-# 🚨 Error Handling
-
-A centralized error handling middleware is used throughout the application.
-
-### Standard Error Response
-
-```json
-{
-    "success": false,
-    "message": "Error message"
-}
-```
-
-### Common HTTP Status Codes
-
-| Status Code | Description |
-|--------------|-------------|
-| 200 | Success |
-| 201 | Resource Created |
-| 400 | Bad Request |
-| 401 | Unauthorized |
-| 403 | Forbidden |
-| 404 | Resource Not Found |
-| 409 | Conflict |
-| 422 | Validation Error |
-| 500 | Internal Server Error |
-
----
-
-# 📊 Logging
-
-The backend includes a centralized logging utility to record:
-
-- Server Startup
-- Database Connection
-- Error Logs
-- Important Application Events
-
-This helps simplify debugging and monitoring in development and production environments.
-
-# 🚀 Deployment
-
-This backend is production-ready and can be deployed on any Node.js hosting platform.
-
-## Recommended Platforms
-
-- Render
-- Railway
-- DigitalOcean
-- AWS EC2
-- VPS
-- Heroku (if applicable)
-
----
-
-## Production Checklist
-
-Before deployment, ensure the following:
-
-- Configure all environment variables
-- Use MongoDB Atlas
-- Configure Cloudinary credentials
-- Configure SMTP credentials
-- Set `NODE_ENV=production`
-- Update `FRONTEND_URL`
-- Enable HTTPS
-- Verify CORS configuration
-- Test all APIs
-- Verify authentication
-- Verify file uploads
-
----
-
-# 🧪 Testing
-
-The project has been thoroughly tested during development.
-
-### Authentication
-
-- Login
-- Logout
-- Current User
-
-### Portfolio Modules
-
-- Projects CRUD
-- Skills CRUD
-- Education CRUD
-- Experience CRUD
-- Certifications CRUD
-- Testimonials CRUD
-- Resume Management
-- Social Links
-- Website Settings
-
-### Blog Module
-
-- Blog CRUD
-- Slug Routing
-- Draft & Published Blogs
-- View Counter
-
-### Contact & Inbox
-
-- Contact Form
-- Inbox Management
-- Reply Status
-- Message Statistics
-
-### Analytics
-
-- Dashboard Overview
-- Daily Analytics
-- Browser Analytics
-- Device Analytics
-- Operating System Analytics
-- Country Analytics
-- Page Analytics
-
-### Security Testing
-
-- Protected Routes
-- JWT Authentication
-- Authorization
-- Validation Middleware
-- Rate Limiting
-
----
-
-# 📈 Project Statistics
-
-| Category | Count |
-|-----------|------:|
-| Modules | 15+ |
-| REST APIs | 60+ |
-| Controllers | 15+ |
-| Models | 13+ |
-| Routes | 15+ |
-| Middleware | Multiple |
-| Security Features | 8+ |
-| Development Duration | 24 Days |
-
----
-
-# 🔮 Future Improvements
-
-The following enhancements can be added in future versions:
-
-- Swagger / OpenAPI Documentation
-- Docker Support
-- Redis Caching
-- API Versioning
-- Unit Testing (Jest)
-- Integration Testing (Supertest)
-- CI/CD Pipeline using GitHub Actions
-- WebSocket Notifications
-- Two-Factor Authentication (2FA)
-- Refresh Token Authentication
-- Audit Logs
-- Multi-language Support
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome.
-
-If you would like to improve the project:
-
-1. Fork the repository.
-2. Create a new feature branch.
-3. Commit your changes.
-4. Push the branch.
-5. Open a Pull Request.
-
-Please ensure that new code follows the existing project structure and coding conventions.
-
----
-
-# 📄 License
-
-This project is licensed under the **MIT License**.
-
-Feel free to use, modify, and distribute it in accordance with the license terms.
-
----
-
-# 👨‍💻 Author
-
-**Nimish Patel**
-
-- 🎓 B.Tech, NIT Raipur
-- 💻 Full Stack MERN Developer
-- 🧠 Competitive Programmer
-
-### Connect with Me
-
-- GitHub: https://github.com/nimish9335
-- LinkedIn: *(Add your LinkedIn profile URL here)*
-- Portfolio: *(Add your deployed portfolio URL here)*
-
----
-
-# ⭐ Support
-
-If you found this project useful:
-
-- ⭐ Star the repository
-- 🍴 Fork the repository
-- 💡 Share your feedback
-- 🛠️ Report issues or suggest improvements
-
-Your support helps improve the project and motivates future development.
-
----
-
-<p align="center">
-  <b>Built with ❤️ using Node.js, Express.js & MongoDB</b>
-</p>
+MIT — free to use and modify.
