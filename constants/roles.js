@@ -1,6 +1,6 @@
 const ROLES = Object.freeze({
     ADMIN: "ADMIN",
-    VISITOR: "VISITOR",
+    USER: "USER",
 });
 
 module.exports = ROLES;
