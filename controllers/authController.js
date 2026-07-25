@@ -1,21 +1,29 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const cookieOptions = require("../config/cookie");
+
+const {
+    accessTokenCookieOptions,
+    refreshTokenCookieOptions,
+} = require("../config/cookie");
+
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
 
-// Register User
+
+// ==============================
+// REGISTER USER
+// ==============================
+
 const register = asyncHandler(async (req, res) => {
     const { fullName, username, email, password } = req.body;
 
-    // Check duplicate email
     const existingEmail = await User.findOne({ email });
 
     if (existingEmail) {
         throw new ApiError(409, "User with this email already exists.");
     }
 
-    // Check duplicate username
     const existingUsername = await User.findOne({
         username: username.toLowerCase(),
     });
@@ -24,7 +32,6 @@ const register = asyncHandler(async (req, res) => {
         throw new ApiError(409, "Username is already taken.");
     }
 
-    // Create user
     const user = await User.create({
         fullName,
         username: username.toLowerCase(),
@@ -32,13 +39,21 @@ const register = asyncHandler(async (req, res) => {
         password,
     });
 
-    // Generate authentication token
-    const token = user.generateJWT();
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
 
-    // Set HTTP-only cookie
-    res.cookie("token", token, cookieOptions);
+    res.cookie(
+        "accessToken",
+        accessToken,
+        accessTokenCookieOptions
+    );
 
-    // Safe user response
+    res.cookie(
+        "refreshToken",
+        refreshToken,
+        refreshTokenCookieOptions
+    );
+
     const createdUser = await User.findById(user._id);
 
     return res.status(201).json(
@@ -50,7 +65,11 @@ const register = asyncHandler(async (req, res) => {
     );
 });
 
-// Login User
+
+// ==============================
+// LOGIN USER
+// ==============================
+
 const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
@@ -66,9 +85,20 @@ const login = asyncHandler(async (req, res) => {
         throw new ApiError(401, "Invalid credentials.");
     }
 
-    const token = user.generateJWT();
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
 
-    res.cookie("token", token, cookieOptions);
+    res.cookie(
+        "accessToken",
+        accessToken,
+        accessTokenCookieOptions
+    );
+
+    res.cookie(
+        "refreshToken",
+        refreshToken,
+        refreshTokenCookieOptions
+    );
 
     return res.status(200).json(
         new ApiResponse(
@@ -79,9 +109,63 @@ const login = asyncHandler(async (req, res) => {
     );
 });
 
-// Logout User
+
+// ==============================
+// REFRESH ACCESS TOKEN
+// ==============================
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+        throw new ApiError(401, "Refresh token not found.");
+    }
+
+    let decoded;
+
+    try {
+        decoded = jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET
+        );
+    } catch (error) {
+        throw new ApiError(
+            401,
+            "Invalid or expired refresh token."
+        );
+    }
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+        throw new ApiError(401, "User not found.");
+    }
+
+    const newAccessToken = user.generateAccessToken();
+
+    res.cookie(
+        "accessToken",
+        newAccessToken,
+        accessTokenCookieOptions
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            null,
+            "Access token refreshed successfully."
+        )
+    );
+});
+
+
+// ==============================
+// LOGOUT USER
+// ==============================
+
 const logout = asyncHandler(async (req, res) => {
-    res.clearCookie("token");
+    res.clearCookie("accessToken", accessTokenCookieOptions);
+    res.clearCookie("refreshToken", refreshTokenCookieOptions);
 
     return res.status(200).json(
         new ApiResponse(
@@ -92,7 +176,11 @@ const logout = asyncHandler(async (req, res) => {
     );
 });
 
-// Get Current User
+
+// ==============================
+// GET CURRENT USER
+// ==============================
+
 const getCurrentUser = asyncHandler(async (req, res) => {
     return res.status(200).json(
         new ApiResponse(
@@ -103,9 +191,11 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     );
 });
 
+
 module.exports = {
     register,
     login,
     logout,
+    refreshAccessToken,
     getCurrentUser,
 };

@@ -28,6 +28,7 @@ const contactRoutes = require("./routes/contactRoutes");
 const inboxRoutes = require("./routes/inboxRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 
 const app = express();
 
@@ -43,6 +44,8 @@ app.use(useragent.express());
 
 // Authentication
 app.use("/api/auth", authLimiter, authRoutes);
+
+app.use("/api/profile", apiLimiter, profileRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({

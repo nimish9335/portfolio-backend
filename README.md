@@ -426,13 +426,15 @@ Recommended: build small `ApiResponse` and `ApiError` utility classes + an `asyn
 
 ## 📈 Development Progress
 
+## 📈 Development Progress
+
 ### ✅ Day 1 — Backend Audit + User Model + Registration
 
 **Status:** Completed
 
-Day 1 focused on converting the existing single-admin authentication foundation into the starting point for a multi-user Portfolio Builder.
+Day 1 focused on transforming the existing single-admin authentication foundation into the starting point for a multi-user Portfolio Builder.
 
-Instead of rebuilding the existing authentication system, the current implementation was audited, reused, and extended for registered portfolio users.
+Instead of rebuilding the existing authentication system, the current implementation was audited, reused, and extended to support registered portfolio users.
 
 #### Implementation Completed
 
@@ -448,9 +450,9 @@ Instead of rebuilding the existing authentication system, the current implementa
 - Added duplicate email protection
 - Added duplicate username protection
 - Reused existing bcrypt password hashing
-- Reused existing JWT generation
-- Reused HTTP-only authentication cookie flow
-- Verified existing login compatibility with newly registered users
+- Reused the existing JWT authentication foundation
+- Reused HTTP-only cookie authentication
+- Verified login compatibility with newly registered users
 - Verified authenticated `/me` route
 - Verified unauthorized access protection
 
@@ -475,14 +477,343 @@ USER
       ├── Portfolio Settings
       ├── Inbox
       └── Analytics
+```
+
+Public portfolio visitors do not require a database user role. They interact with published portfolios through public APIs.
+
+#### Registration API
+
+```http
+POST /api/auth/register
+```
+
+Example request:
+
+```json
+{
+  "fullName": "Test User",
+  "username": "test-user",
+  "email": "testuser@example.com",
+  "password": "Test@12345"
+}
+```
+
+Newly registered accounts automatically receive:
+
+```text
+role: USER
+```
+
+The registration controller does not accept a client-provided role, preventing users from assigning themselves administrative privileges.
+
+#### Day 1 Testing
+
+| Test | Result |
+| --- | --- |
+| Successful user registration | ✅ Passed |
+| `201 Created` response | ✅ Passed |
+| Default `USER` role | ✅ Passed |
+| Unique username | ✅ Passed |
+| Duplicate email rejection (`409`) | ✅ Passed |
+| Duplicate username rejection (`409`) | ✅ Passed |
+| Invalid registration data rejection | ✅ Passed |
+| Password bcrypt hashing | ✅ Passed |
+| Password excluded from API response | ✅ Passed |
+| Login with registered user | ✅ Passed |
+| JWT authentication cookie | ✅ Passed |
+| `GET /api/auth/me` | ✅ Passed |
+| Unauthorized `/me` request (`401`) | ✅ Passed |
+
+#### Day 1 Result
+
+The backend now supports secure registration of multiple portfolio users with unique usernames.
+
+The existing authentication system was successfully extended without unnecessarily rebuilding completed functionality.
+
+**Day 1 Status: ✅ COMPLETE**
+
+---
+
+### ✅ Day 2 — Authentication (Access/Refresh) + Profile + Multi-User Foundation
+
+**Status:** Completed
+
+Day 2 upgraded the authentication system from a single long-lived JWT into an Access + Refresh Token architecture, introduced authenticated profile management, and established the reusable ownership foundation required for multi-user portfolio resources.
+
+#### Authentication Upgrade
+
+- Replaced the previous single JWT authentication flow
+- Added short-lived Access Tokens
+- Added long-lived Refresh Tokens
+- Added separate secrets and expiry configuration for both token types
+- Added separate HTTP-only cookies for Access and Refresh Tokens
+- Updated registration to issue both authentication tokens
+- Updated login to issue both authentication tokens
+- Updated authentication middleware to verify Access Tokens
+- Added Refresh Token API
+- Added automatic generation of a new Access Token using a valid Refresh Token
+- Updated logout to clear both authentication cookies
+- Verified authentication lifecycle end-to-end
+
+#### Token Configuration
+
+```env
+ACCESS_TOKEN_SECRET=your_access_secret
+ACCESS_TOKEN_EXPIRY=15m
+
+REFRESH_TOKEN_SECRET=your_refresh_secret
+REFRESH_TOKEN_EXPIRY=7d
+```
+
+#### Token Architecture
+
+```text
+Register / Login
+      │
+      ├── Access Token
+      │      ├── Short-lived (15 minutes)
+      │      ├── HTTP-only cookie
+      │      └── Used for protected APIs
+      │
+      └── Refresh Token
+             ├── Long-lived (7 days)
+             ├── HTTP-only cookie
+             └── Used to generate a new Access Token
+```
+
+#### Authentication Lifecycle
+
+```text
+Register / Login
+      │
+      ▼
+Access Token + Refresh Token
+      │
+      ▼
+Protected API Request
+      │
+      ▼
+Access Token Expires / Missing
+      │
+      ▼
+POST /api/auth/refresh-token
+      │
+      ▼
+Refresh Token Verified
+      │
+      ▼
+New Access Token
+      │
+      ▼
+Protected APIs Available Again
+```
+
+#### Authentication APIs
+
+```http
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/refresh-token
+POST /api/auth/logout
+GET  /api/auth/me
+```
+
+---
+
+#### Profile Management
+
+The existing `User` model was extended with portfolio profile information instead of introducing an unnecessary separate Profile collection.
+
+This keeps the one-to-one account and profile information inside the same user document.
+
+Added profile fields:
+
+```text
+headline
+bio
+location
+phone
+```
+
+Existing fields reused:
+
+```text
+fullName
+username
+email
+avatar
+```
+
+#### Profile APIs
+
+```http
+GET /api/profile
+PUT /api/profile
+```
+
+Both profile APIs require authentication.
+
+The authenticated user is identified through:
+
+```js
+req.user._id
+```
+
+#### Editable Profile Fields
+
+```text
+fullName
+headline
+bio
+location
+phone
+```
+
+Sensitive account fields cannot be modified through the profile update API:
+
+```text
+role       ❌
+email      ❌
+username   ❌
+password   ❌
+```
+
+This prevents profile updates from being used for privilege escalation or unauthorized account modifications.
+
+#### Profile Validation
+
+Profile input validation was added for:
+
+- Full name length
+- Headline length
+- Bio length
+- Location length
+- Phone length
+
+The existing centralized validation and error-handling architecture continues to be reused.
+
+---
+
+#### Multi-User Ownership Foundation
+
+The existing resource models were audited before beginning their multi-user migration.
+
+The following models were inspected:
+
+```text
+Project
+Skill
+Education
+```
+
+These resources were identified as single-user resources because they currently do not contain an owner reference.
+
+A reusable ownership helper was introduced:
+
+```js
+const mongoose = require("mongoose");
+
+const userOwnership = {
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        index: true,
+    },
+};
+
+module.exports = userOwnership;
+```
+
+This ownership definition will be reused across user-owned portfolio resources.
+
+#### Ownership Architecture
+
+```text
+User
+ │
+ ├── Projects
+ ├── Skills
+ ├── Education
+ ├── Experience
+ ├── Certifications
+ ├── Testimonials
+ ├── Resume
+ ├── Social Links
+ ├── Blogs
+ ├── Portfolio Settings
+ ├── Inbox
+ └── Analytics
+```
+
+Each migrated resource will reference its owner:
+
+```text
+Resource
+   │
+   └── user
+        │
+        ▼
+      User._id
+```
+
+Private collection queries will eventually follow:
+
+```js
+Model.find({
+    user: req.user._id,
+});
+```
+
+Individual resource operations will use both the resource ID and authenticated user ID:
+
+```js
+Model.findOne({
+    _id: req.params.id,
+    user: req.user._id,
+});
+```
+
+This ensures that knowing another resource's MongoDB ObjectId is not enough to access or modify it.
+
+#### Day 2 Testing
+
+| Test | Result |
+| --- | --- |
+| Login generates Access Token | ✅ Passed |
+| Login generates Refresh Token | ✅ Passed |
+| Protected API works with Access Token | ✅ Passed |
+| Missing Access Token returns `401` | ✅ Passed |
+| Refresh Token generates new Access Token | ✅ Passed |
+| Refreshed Access Token works | ✅ Passed |
+| Logout clears Access Token | ✅ Passed |
+| Logout clears Refresh Token | ✅ Passed |
+| Refresh after logout rejected | ✅ Passed |
+| Authenticated profile fetch | ✅ Passed |
+| Authenticated profile update | ✅ Passed |
+| Profile data persistence | ✅ Passed |
+| Profile input validation | ✅ Passed |
+| Sensitive account fields protected | ✅ Passed |
+| Password excluded from API responses | ✅ Passed |
+
+#### Day 2 Result
+
+The backend now has a complete Access + Refresh Token authentication lifecycle, authenticated user profile management, and a reusable ownership architecture for future multi-user resources.
+
+The foundation is now ready for migrating Projects, Skills, and Education from global single-user resources into strictly isolated user-owned resources.
+
+**Day 2 Status: ✅ COMPLETE**
+
+---
 
 --
+
 ## 🗓️ Upgrade Plan (10 Days)
 
 | Day | Development Focus |
 | ---: | ------------------ |
 | Day 1 |✅ Backend Audit + User Model + Registration |
-| Day 2 | Authentication (Access/Refresh) + Profile + Multi-User Foundation |
+| Day 2 |✅ Authentication (Access/Refresh) + Profile + Multi-User Foundation |
 | Day 3 | Projects + Skills + Education Migration to ownership model |
 | Day 4 | Experience + Certifications + Testimonials |
 | Day 5 | Resume + Social Links + Portfolio Settings |

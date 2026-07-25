@@ -1,39 +1,45 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/ApiError");
 
-const protect = async (req, res, next) => {
-    try {
-        const token = req.cookies.token;
+const protect = asyncHandler(async (req, res, next) => {
+    const accessToken = req.cookies.accessToken;
 
-        if (!token) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized. Please login.",
-            });
-        }
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        const user = await User.findById(decoded.id).select("-password");
-
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found.",
-            });
-        }
-
-        req.user = user;
-
-        next();
-
-    } catch (error) {
-        return res.status(401).json({
-            success: false,
-            message: "Invalid or expired token.",
-        });
+    if (!accessToken) {
+        throw new ApiError(
+            401,
+            "Unauthorized. Please login."
+        );
     }
-};
+
+    let decoded;
+
+    try {
+        decoded = jwt.verify(
+            accessToken,
+            process.env.ACCESS_TOKEN_SECRET
+        );
+    } catch (error) {
+        throw new ApiError(
+            401,
+            "Invalid or expired access token."
+        );
+    }
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+        throw new ApiError(
+            401,
+            "User not found."
+        );
+    }
+
+    req.user = user;
+
+    next();
+});
 
 module.exports = {
     protect,

@@ -59,6 +59,33 @@ const userSchema = new mongoose.Schema(
                 default: "",
             },
         },
+        headline: {
+            type: String,
+            trim: true,
+            maxlength: 120,
+            default: "",
+        },
+
+        bio: {
+            type: String,
+            trim: true,
+            maxlength: 1000,
+            default: "",
+        },
+
+        location: {
+            type: String,
+            trim: true,
+            maxlength: 100,
+            default: "",
+        },
+
+        phone: {
+            type: String,
+            trim: true,
+            maxlength: 20,
+            default: "",
+        },
     },
     {
         timestamps: true,
@@ -66,9 +93,9 @@ const userSchema = new mongoose.Schema(
 );
 
 // Hash password before saving
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
     if (!this.isModified("password")) {
-        return next();
+        return;
     }
 
     this.password = await bcrypt.hash(this.password, 10);
@@ -79,16 +106,29 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Generate JWT
-userSchema.methods.generateJWT = function () {
+// Generate short-lived access token
+userSchema.methods.generateAccessToken = function () {
     return jwt.sign(
         {
             id: this._id,
             role: this.role,
         },
-        process.env.JWT_SECRET,
+        process.env.ACCESS_TOKEN_SECRET,
         {
-            expiresIn: process.env.JWT_EXPIRES_IN,
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+        }
+    );
+};
+
+// Generate long-lived refresh token
+userSchema.methods.generateRefreshToken = function () {
+    return jwt.sign(
+        {
+            id: this._id,
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
         }
     );
 };

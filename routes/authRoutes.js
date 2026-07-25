@@ -5,6 +5,7 @@ const {
     register,
     login,
     logout,
+    refreshAccessToken,
     getCurrentUser,
 } = require("../controllers/authController");
 
@@ -20,6 +21,7 @@ const validate = require("../middleware/validate");
 // Public Routes
 router.post("/register", registerValidator, validate, register);
 router.post("/login", loginValidator, validate, login);
+router.post("/refresh-token", refreshAccessToken);
 
 // Protected Routes
 router.post("/logout", protect, logout);
