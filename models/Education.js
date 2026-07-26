@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
+const userOwnership = require("../helpers/userOwnership");
 
 const educationSchema = new mongoose.Schema(
     {
+        ...userOwnership,
+
         institution: {
             type: String,
             required: true,
@@ -56,18 +59,22 @@ const educationSchema = new mongoose.Schema(
         order: {
             type: Number,
             default: 0,
-            index: true,
         },
 
         isActive: {
             type: Boolean,
             default: true,
-            index: true,
         },
     },
     {
         timestamps: true,
     }
 );
+
+// Optimized user-specific education queries
+educationSchema.index({
+    user: 1,
+    order: 1,
+});
 
 module.exports = mongoose.model("Education", educationSchema);

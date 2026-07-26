@@ -2,7 +2,16 @@ const Project = require("../models/Project");
 const asyncHandler = require("../utils/asyncHandler");
 const ApiResponse = require("../utils/ApiResponse");
 const ApiError = require("../utils/ApiError");
-const { uploadToCloudinary,deleteFromCloudinary,} = require("../services/cloudinary");
+
+const {
+    uploadToCloudinary,
+    deleteFromCloudinary,
+} = require("../services/cloudinary");
+
+
+// ==============================
+// CREATE PROJECT
+// ==============================
 
 const createProject = asyncHandler(async (req, res) => {
     if (!req.file) {
@@ -14,8 +23,22 @@ const createProject = asyncHandler(async (req, res) => {
         "portfolio/projects"
     );
 
+    let { techStack } = req.body;
+
+    if (typeof techStack === "string") {
+        techStack = techStack
+            .split(",")
+            .map((tech) => tech.trim())
+            .filter(Boolean);
+    }
+
     const project = await Project.create({
         ...req.body,
+
+        // Ownership
+        user: req.user._id,
+
+        techStack,
 
         thumbnail: {
             url: uploadedImage.secure_url,
@@ -32,14 +55,20 @@ const createProject = asyncHandler(async (req, res) => {
     );
 });
 
+
+// ==============================
+// GET CURRENT USER PROJECTS
+// ==============================
+
 const getAllProjects = asyncHandler(async (req, res) => {
     const projects = await Project.find({
-        isPublished: true,
-    }).sort({
-        order: 1,
-        createdAt: -1,
+        user: req.user._id,
     })
-    .lean();
+        .sort({
+            order: 1,
+            createdAt: -1,
+        })
+        .lean();
 
     return res.status(200).json(
         new ApiResponse(
@@ -50,12 +79,17 @@ const getAllProjects = asyncHandler(async (req, res) => {
     );
 });
 
+
+// ==============================
+// GET CURRENT USER PROJECT BY ID
+// ==============================
+
 const getProjectById = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
     const project = await Project.findOne({
         _id: id,
-        isPublished: true,
+        user: req.user._id,
     }).lean();
 
     if (!project) {
@@ -71,10 +105,18 @@ const getProjectById = asyncHandler(async (req, res) => {
     );
 });
 
+
+// ==============================
+// UPDATE CURRENT USER PROJECT
+// ==============================
+
 const updateProject = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const project = await Project.findById(id);
+    const project = await Project.findOne({
+        _id: id,
+        user: req.user._id,
+    });
 
     if (!project) {
         throw new ApiError(404, "Project not found.");
@@ -90,10 +132,12 @@ const updateProject = asyncHandler(async (req, res) => {
     }
 
     if (req.file) {
-        // Delete old thumbnail
-        await deleteFromCloudinary(project.thumbnail.public_id);
+        if (project.thumbnail?.public_id) {
+            await deleteFromCloudinary(
+                project.thumbnail.public_id
+            );
+        }
 
-        // Upload new thumbnail
         const uploadedImage = await uploadToCloudinary(
             req.file.buffer,
             "portfolio/projects"
@@ -105,12 +149,29 @@ const updateProject = asyncHandler(async (req, res) => {
         };
     }
 
-    project.title = req.body.title ?? project.title;
-    project.description = req.body.description ?? project.description;
-    project.techStack = techStack ?? project.techStack;
-    project.githubUrl = req.body.githubUrl ?? project.githubUrl;
-    project.liveUrl = req.body.liveUrl ?? project.liveUrl;
-    project.featured = req.body.featured ?? project.featured;
+    project.title =
+        req.body.title ?? project.title;
+
+    project.description =
+        req.body.description ?? project.description;
+
+    project.techStack =
+        techStack ?? project.techStack;
+
+    project.githubUrl =
+        req.body.githubUrl ?? project.githubUrl;
+
+    project.liveUrl =
+        req.body.liveUrl ?? project.liveUrl;
+
+    project.featured =
+        req.body.featured ?? project.featured;
+
+    project.order =
+        req.body.order ?? project.order;
+
+    project.isPublished =
+        req.body.isPublished ?? project.isPublished;
 
     await project.save();
 
@@ -123,25 +184,37 @@ const updateProject = asyncHandler(async (req, res) => {
     );
 });
 
+
+// ==============================
+// DELETE CURRENT USER PROJECT
+// ==============================
+
 const deleteProject = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const project = await Project.findById(id);
+    const project = await Project.findOne({
+        _id: id,
+        user: req.user._id,
+    });
 
     if (!project) {
         throw new ApiError(404, "Project not found.");
     }
 
-    // Delete thumbnail
+    // Delete thumbnail from Cloudinary
     if (project.thumbnail?.public_id) {
-        await deleteFromCloudinary(project.thumbnail.public_id);
+        await deleteFromCloudinary(
+            project.thumbnail.public_id
+        );
     }
 
-    // Delete gallery images
+    // Delete gallery images from Cloudinary
     if (project.gallery?.length > 0) {
         for (const image of project.gallery) {
             if (image.public_id) {
-                await deleteFromCloudinary(image.public_id);
+                await deleteFromCloudinary(
+                    image.public_id
+                );
             }
         }
     }
@@ -156,6 +229,7 @@ const deleteProject = asyncHandler(async (req, res) => {
         )
     );
 });
+
 
 module.exports = {
     createProject,

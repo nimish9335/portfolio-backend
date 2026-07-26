@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
+const userOwnership = require("../helpers/userOwnership");
 
 const projectSchema = new mongoose.Schema(
     {
+        ...userOwnership,
+
         title: {
             type: String,
             required: true,
@@ -39,6 +42,7 @@ const projectSchema = new mongoose.Schema(
                 type: String,
                 required: true,
             },
+
             public_id: {
                 type: String,
                 required: true,
@@ -72,5 +76,11 @@ const projectSchema = new mongoose.Schema(
     }
 );
 
-projectSchema.index({ order: 1 });
+// Optimized user-specific project ordering
+projectSchema.index({
+    user: 1,
+    order: 1,
+    createdAt: -1,
+});
+
 module.exports = mongoose.model("Project", projectSchema);

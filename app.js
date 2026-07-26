@@ -13,7 +13,9 @@ const {
 const errorHandler = require("./middleware/errorHandler");
 const trackVisitor = require("./middleware/analyticsMiddleware");
 
+// Routes
 const authRoutes = require("./routes/authRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const skillRoutes = require("./routes/skillRoutes");
 const educationRoutes = require("./routes/educationRoutes");
@@ -28,24 +30,53 @@ const contactRoutes = require("./routes/contactRoutes");
 const inboxRoutes = require("./routes/inboxRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
-const profileRoutes = require("./routes/profileRoutes");
 
 const app = express();
 
-// Apply all security middleware
+
+// ==============================
+// SECURITY
+// ==============================
+
 securityMiddleware(app);
 
-// Core Middleware
+
+// ==============================
+// CORE MIDDLEWARE
+// ==============================
+
 app.use(corsMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(useragent.express());
 
-// Authentication
-app.use("/api/auth", authLimiter, authRoutes);
 
-app.use("/api/profile", apiLimiter, profileRoutes);
+// ==============================
+// AUTHENTICATION
+// ==============================
+
+app.use(
+  "/api/auth",
+  authLimiter,
+  authRoutes
+);
+
+
+// ==============================
+// PROFILE
+// ==============================
+
+app.use(
+  "/api/profile",
+  apiLimiter,
+  profileRoutes
+);
+
+
+// ==============================
+// HEALTH CHECK
+// ==============================
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -55,25 +86,126 @@ app.get("/", (req, res) => {
   });
 });
 
-// Public APIs
-app.use("/api/projects", apiLimiter, trackVisitor, projectRoutes);
-app.use("/api/skills", apiLimiter, trackVisitor, skillRoutes);
-app.use("/api/education", apiLimiter, trackVisitor, educationRoutes);
-app.use("/api/experience", apiLimiter, trackVisitor, experienceRoutes);
-app.use("/api/certifications", apiLimiter, trackVisitor, certificationRoutes);
-app.use("/api/testimonials", apiLimiter, trackVisitor, testimonialRoutes);
-app.use("/api/resume", apiLimiter, trackVisitor, resumeRoutes);
-app.use("/api/social-links", apiLimiter, trackVisitor, socialLinkRoutes);
-app.use("/api/settings", apiLimiter, trackVisitor, settingRoutes);
-app.use("/api/blogs", apiLimiter, trackVisitor, blogRoutes);
-app.use("/api/contact", apiLimiter, trackVisitor, contactRoutes);
 
-// Admin APIs
-app.use("/api/inbox", adminLimiter, inboxRoutes);
-app.use("/api/dashboard", adminLimiter, dashboardRoutes);
-app.use("/api/analytics", adminLimiter, analyticsRoutes);
+// ==============================
+// MULTI-USER PRIVATE APIs
+// ==============================
 
-// Global Error Handler (Always Last)
+// These modules are already migrated to
+// authenticated user ownership.
+
+app.use(
+  "/api/projects",
+  apiLimiter,
+  projectRoutes
+);
+
+app.use(
+  "/api/skills",
+  apiLimiter,
+  skillRoutes
+);
+
+app.use(
+  "/api/education",
+  apiLimiter,
+  educationRoutes
+);
+
+
+// ==============================
+// EXISTING APIs
+// ==============================
+
+// These modules will be migrated to
+// multi-user ownership in upcoming days.
+
+app.use(
+  "/api/experience",
+  apiLimiter,
+  trackVisitor,
+  experienceRoutes
+);
+
+app.use(
+  "/api/certifications",
+  apiLimiter,
+  trackVisitor,
+  certificationRoutes
+);
+
+app.use(
+  "/api/testimonials",
+  apiLimiter,
+  trackVisitor,
+  testimonialRoutes
+);
+
+app.use(
+  "/api/resume",
+  apiLimiter,
+  trackVisitor,
+  resumeRoutes
+);
+
+app.use(
+  "/api/social-links",
+  apiLimiter,
+  trackVisitor,
+  socialLinkRoutes
+);
+
+app.use(
+  "/api/settings",
+  apiLimiter,
+  trackVisitor,
+  settingRoutes
+);
+
+app.use(
+  "/api/blogs",
+  apiLimiter,
+  trackVisitor,
+  blogRoutes
+);
+
+app.use(
+  "/api/contact",
+  apiLimiter,
+  trackVisitor,
+  contactRoutes
+);
+
+
+// ==============================
+// ADMIN APIs
+// ==============================
+
+app.use(
+  "/api/inbox",
+  adminLimiter,
+  inboxRoutes
+);
+
+app.use(
+  "/api/dashboard",
+  adminLimiter,
+  dashboardRoutes
+);
+
+app.use(
+  "/api/analytics",
+  adminLimiter,
+  analyticsRoutes
+);
+
+
+// ==============================
+// GLOBAL ERROR HANDLER
+// ==============================
+
+// Always keep this middleware last.
 app.use(errorHandler);
+
 
 module.exports = app;

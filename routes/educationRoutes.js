@@ -1,9 +1,9 @@
 const express = require("express");
+const router = express.Router();
 
 const {
     createEducation,
     getAllEducation,
-    getAdminEducation,
     getEducationById,
     updateEducation,
     deleteEducation,
@@ -17,42 +17,57 @@ const {
     updateEducationValidator,
 } = require("../validators/educationValidator");
 
-const { validateObjectId } = require("../validators/commonValidator");
+const {
+    validateObjectId,
+} = require("../validators/commonValidator");
 
-const router = express.Router();
 
-// Public Routes
-router.get("/", getAllEducation);
+// All education routes require authentication
+router.use(protect);
 
-// Admin Routes
-router.get("/admin", protect, getAdminEducation);
 
-// Public Route
-router.get("/:id", validateObjectId("id"), validate, getEducationById);
+// Get Current User Education
+router.get(
+    "/",
+    getAllEducation
+);
 
+
+// Create Education
 router.post(
     "/",
-    protect,
     createEducationValidator,
     validate,
     createEducation
 );
 
+
+// Get Current User Education By ID
+router.get(
+    "/:id",
+    validateObjectId("id"),
+    validate,
+    getEducationById
+);
+
+
+// Update Current User Education
 router.put(
     "/:id",
-    protect,
     validateObjectId("id"),
     updateEducationValidator,
     validate,
     updateEducation
 );
 
+
+// Delete Current User Education
 router.delete(
     "/:id",
-    protect,
     validateObjectId("id"),
     validate,
     deleteEducation
 );
+
 
 module.exports = router;

@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
+const userOwnership = require("../helpers/userOwnership");
 
 const skillSchema = new mongoose.Schema(
     {
+        ...userOwnership,
+
         name: {
             type: String,
             required: [true, "Skill name is required"],
@@ -36,6 +39,7 @@ const skillSchema = new mongoose.Schema(
                 type: String,
                 default: "",
             },
+
             public_id: {
                 type: String,
                 default: "",
@@ -57,6 +61,10 @@ const skillSchema = new mongoose.Schema(
     }
 );
 
-skillSchema.index({ order: 1 });
+// Optimized user-specific skill queries
+skillSchema.index({
+    user: 1,
+    order: 1,
+});
 
 module.exports = mongoose.model("Skill", skillSchema);
