@@ -3,79 +3,139 @@ const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
 
-// Create Certification
+// ==============================
+// CREATE CERTIFICATION
+// ==============================
+
 const createCertification = asyncHandler(async (req, res) => {
-    const certification = await Certification.create(req.body);
+    const certification = await Certification.create({
+        user: req.user._id,
+        title: req.body.title,
+        issuingOrganization: req.body.issuingOrganization,
+        issueDate: req.body.issueDate,
+        expiryDate: req.body.expiryDate,
+        credentialId: req.body.credentialId,
+        credentialUrl: req.body.credentialUrl,
+        description: req.body.description,
+        skills: req.body.skills,
+        order: req.body.order,
+        isActive: req.body.isActive,
+    });
 
     return res.status(201).json(
-        new ApiResponse(201, certification, "Certification added successfully")
+        new ApiResponse(
+            201,
+            certification,
+            "Certification added successfully"
+        )
     );
 });
 
-// Get Public Certifications
+// ==============================
+// GET CURRENT USER CERTIFICATIONS
+// ==============================
+
 const getAllCertifications = asyncHandler(async (req, res) => {
-    const certifications = await Certification.find({ isActive: true })
-        .sort({ order: 1 })
+    const certifications = await Certification.find({
+        user: req.user._id,
+    })
+        .sort({
+            order: 1,
+            createdAt: -1,
+        })
         .lean();
 
     return res.status(200).json(
-        new ApiResponse(200, certifications, "Certifications fetched successfully")
+        new ApiResponse(
+            200,
+            certifications,
+            "Certifications fetched successfully"
+        )
     );
 });
 
-// Get Admin Certifications
-const getAdminCertifications = asyncHandler(async (req, res) => {
-    const certifications = await Certification.find()
-        .sort({ order: 1 })
-        .lean();
+// ==============================
+// GET CERTIFICATION BY ID
+// ==============================
 
-    return res.status(200).json(
-        new ApiResponse(200, certifications, "Certifications fetched successfully")
-    );
-});
-
-// Get Certification By ID
 const getCertificationById = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const certification = await Certification.findById(id).lean();
+    const certification = await Certification.findOne({
+        _id: id,
+        user: req.user._id,
+    }).lean();
 
     if (!certification) {
         throw new ApiError(404, "Certification not found");
     }
 
     return res.status(200).json(
-        new ApiResponse(200, certification, "Certification fetched successfully")
+        new ApiResponse(
+            200,
+            certification,
+            "Certification fetched successfully"
+        )
     );
 });
 
-// Update Certification
+// ==============================
+// UPDATE CERTIFICATION
+// ==============================
+
 const updateCertification = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const certification = await Certification.findByIdAndUpdate(
-        id,
-        req.body,
-        {
-            new: true,
-            runValidators: true,
-        }
-    );
+    const certification = await Certification.findOne({
+        _id: id,
+        user: req.user._id,
+    });
 
     if (!certification) {
         throw new ApiError(404, "Certification not found");
     }
 
+    const allowedFields = [
+        "title",
+        "issuingOrganization",
+        "issueDate",
+        "expiryDate",
+        "credentialId",
+        "credentialUrl",
+        "description",
+        "skills",
+        "order",
+        "isActive",
+    ];
+
+    allowedFields.forEach((field) => {
+        if (req.body[field] !== undefined) {
+            certification[field] = req.body[field];
+        }
+    });
+
+    await certification.save();
+
     return res.status(200).json(
-        new ApiResponse(200, certification, "Certification updated successfully")
+        new ApiResponse(
+            200,
+            certification,
+            "Certification updated successfully"
+        )
     );
 });
 
-// Delete Certification
+// ==============================
+// DELETE CERTIFICATION
+// ==============================
+
 const deleteCertification = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const certification = await Certification.findById(id);
+    const certification = await Certification.findOne({
+        _id: id,
+        user: req.user._id,
+    });
 
     if (!certification) {
         throw new ApiError(404, "Certification not found");
@@ -84,14 +144,17 @@ const deleteCertification = asyncHandler(async (req, res) => {
     await certification.deleteOne();
 
     return res.status(200).json(
-        new ApiResponse(200, {}, "Certification deleted successfully")
+        new ApiResponse(
+            200,
+            null,
+            "Certification deleted successfully"
+        )
     );
 });
 
 module.exports = {
     createCertification,
     getAllCertifications,
-    getAdminCertifications,
     getCertificationById,
     updateCertification,
     deleteCertification,

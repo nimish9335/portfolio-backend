@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
+const userOwnership = require("../helpers/userOwnership");
 
 const certificationSchema = new mongoose.Schema(
     {
+        ...userOwnership,
+
         title: {
             type: String,
             required: true,
@@ -50,18 +53,22 @@ const certificationSchema = new mongoose.Schema(
         order: {
             type: Number,
             default: 0,
-            index: true,
         },
 
         isActive: {
             type: Boolean,
             default: true,
-            index: true,
         },
     },
     {
         timestamps: true,
     }
 );
+
+// Optimized user-specific certification queries
+certificationSchema.index({
+    user: 1,
+    order: 1,
+});
 
 module.exports = mongoose.model("Certification", certificationSchema);

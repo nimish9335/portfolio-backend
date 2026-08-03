@@ -3,79 +3,146 @@ const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
 
-// Create Experience
+
+// ==============================
+// CREATE EXPERIENCE
+// ==============================
+
 const createExperience = asyncHandler(async (req, res) => {
-    const experience = await Experience.create(req.body);
+    const experience = await Experience.create({
+        user: req.user._id,
+        company: req.body.company,
+        position: req.body.position,
+        employmentType: req.body.employmentType,
+        location: req.body.location,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        currentlyWorking: req.body.currentlyWorking,
+        description: req.body.description,
+        technologies: req.body.technologies,
+        order: req.body.order,
+        isActive: req.body.isActive,
+    });
 
     return res.status(201).json(
-        new ApiResponse(201, experience, "Experience added successfully")
+        new ApiResponse(
+            201,
+            experience,
+            "Experience added successfully"
+        )
     );
 });
 
-// Get Public Experience
+
+// ==============================
+// GET CURRENT USER EXPERIENCES
+// ==============================
+
 const getAllExperience = asyncHandler(async (req, res) => {
-    const experiences = await Experience.find({ isActive: true })
-        .sort({ order: 1 })
+    const experiences = await Experience.find({
+        user: req.user._id,
+    })
+        .sort({
+            order: 1,
+            createdAt: -1,
+        })
         .lean();
 
     return res.status(200).json(
-        new ApiResponse(200, experiences, "Experiences fetched successfully")
+        new ApiResponse(
+            200,
+            experiences,
+            "Experiences fetched successfully"
+        )
     );
 });
 
-// Get Admin Experience
-const getAdminExperience = asyncHandler(async (req, res) => {
-    const experiences = await Experience.find()
-        .sort({ order: 1 })
-        .lean();
 
-    return res.status(200).json(
-        new ApiResponse(200, experiences, "Experiences fetched successfully")
-    );
-});
+// ==============================
+// GET EXPERIENCE BY ID
+// ==============================
 
-// Get Experience By ID
 const getExperienceById = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const experience = await Experience.findById(id).lean();
-    
+    const experience = await Experience.findOne({
+        _id: id,
+        user: req.user._id,
+    }).lean();
+
     if (!experience) {
         throw new ApiError(404, "Experience not found");
     }
 
     return res.status(200).json(
-        new ApiResponse(200, experience, "Experience fetched successfully")
+        new ApiResponse(
+            200,
+            experience,
+            "Experience fetched successfully"
+        )
     );
 });
 
-// Update Experience
+
+// ==============================
+// UPDATE EXPERIENCE
+// ==============================
+
 const updateExperience = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const experience = await Experience.findByIdAndUpdate(
-        id,
-        req.body,
-        {
-            new: true,
-            runValidators: true,
-        }
-    );
+    const experience = await Experience.findOne({
+        _id: id,
+        user: req.user._id,
+    });
 
     if (!experience) {
         throw new ApiError(404, "Experience not found");
     }
 
+    const allowedFields = [
+        "company",
+        "position",
+        "employmentType",
+        "location",
+        "startDate",
+        "endDate",
+        "currentlyWorking",
+        "description",
+        "technologies",
+        "order",
+        "isActive",
+    ];
+
+    allowedFields.forEach((field) => {
+        if (req.body[field] !== undefined) {
+            experience[field] = req.body[field];
+        }
+    });
+
+    await experience.save();
+
     return res.status(200).json(
-        new ApiResponse(200, experience, "Experience updated successfully")
+        new ApiResponse(
+            200,
+            experience,
+            "Experience updated successfully"
+        )
     );
 });
 
-// Delete Experience
+
+// ==============================
+// DELETE EXPERIENCE
+// ==============================
+
 const deleteExperience = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const experience = await Experience.findById(id);
+    const experience = await Experience.findOne({
+        _id: id,
+        user: req.user._id,
+    });
 
     if (!experience) {
         throw new ApiError(404, "Experience not found");
@@ -84,14 +151,18 @@ const deleteExperience = asyncHandler(async (req, res) => {
     await experience.deleteOne();
 
     return res.status(200).json(
-        new ApiResponse(200, {}, "Experience deleted successfully")
+        new ApiResponse(
+            200,
+            null,
+            "Experience deleted successfully"
+        )
     );
 });
+
 
 module.exports = {
     createExperience,
     getAllExperience,
-    getAdminExperience,
     getExperienceById,
     updateExperience,
     deleteExperience,

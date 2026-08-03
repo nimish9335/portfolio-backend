@@ -1,9 +1,9 @@
 const express = require("express");
+const router = express.Router();
 
 const {
     createCertification,
     getAllCertifications,
-    getAdminCertifications,
     getCertificationById,
     updateCertification,
     deleteCertification,
@@ -17,40 +17,53 @@ const {
     updateCertificationValidator,
 } = require("../validators/certificationValidator");
 
-const { validateObjectId } = require("../validators/commonValidator");
+const {
+    validateObjectId,
+} = require("../validators/commonValidator");
 
-const router = express.Router();
 
-// Public Routes
-router.get("/", getAllCertifications);
+// All certification routes require authentication
+router.use(protect);
 
-// Admin Route (Must be before /:id)
-router.get("/admin", protect, getAdminCertifications);
 
-// Public Route
-router.get("/:id", validateObjectId("id"), validate, getCertificationById);
+// Get Current User Certifications
+router.get(
+    "/",
+    getAllCertifications
+);
 
-// Protected Routes
+
+// Create Certification
 router.post(
     "/",
-    protect,
     createCertificationValidator,
     validate,
     createCertification
 );
 
+
+// Get Certification By ID
+router.get(
+    "/:id",
+    validateObjectId("id"),
+    validate,
+    getCertificationById
+);
+
+
+// Update Certification
 router.put(
     "/:id",
-    protect,
     validateObjectId("id"),
     updateCertificationValidator,
     validate,
     updateCertification
 );
 
+
+// Delete Certification
 router.delete(
     "/:id",
-    protect,
     validateObjectId("id"),
     validate,
     deleteCertification

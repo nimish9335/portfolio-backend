@@ -1,9 +1,9 @@
 const express = require("express");
+const router = express.Router();
 
 const {
     createExperience,
     getAllExperience,
-    getAdminExperience,
     getExperienceById,
     updateExperience,
     deleteExperience,
@@ -17,40 +17,44 @@ const {
     updateExperienceValidator,
 } = require("../validators/experienceValidator");
 
-const { validateObjectId } = require("../validators/commonValidator");
+const {
+    validateObjectId,
+} = require("../validators/commonValidator");
 
-const router = express.Router();
+// All experience routes require authentication
+router.use(protect);
 
-// Public Routes
+// Get Current User Experiences
 router.get("/", getAllExperience);
 
-// Admin Route (Keep before :id)
-router.get("/admin", protect, getAdminExperience);
-
-// Public Route
-router.get("/:id", validateObjectId("id"), validate, getExperienceById);
-
-// Protected Routes
+// Create Experience
 router.post(
     "/",
-    protect,
     createExperienceValidator,
     validate,
     createExperience
 );
 
+// Get Experience By ID
+router.get(
+    "/:id",
+    validateObjectId("id"),
+    validate,
+    getExperienceById
+);
+
+// Update Experience
 router.put(
     "/:id",
-    protect,
     validateObjectId("id"),
     updateExperienceValidator,
     validate,
     updateExperience
 );
 
+// Delete Experience
 router.delete(
     "/:id",
-    protect,
     validateObjectId("id"),
     validate,
     deleteExperience

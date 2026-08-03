@@ -1,9 +1,9 @@
 const express = require("express");
+const router = express.Router();
 
 const {
     createTestimonial,
     getAllTestimonials,
-    getAdminTestimonials,
     getTestimonialById,
     updateTestimonial,
     deleteTestimonial,
@@ -17,40 +17,47 @@ const {
     updateTestimonialValidator,
 } = require("../validators/testimonialValidator");
 
-const { validateObjectId } = require("../validators/commonValidator");
+const {
+    validateObjectId,
+} = require("../validators/commonValidator");
 
-const router = express.Router();
+// All testimonial routes require authentication
+router.use(protect);
 
-// Public Routes
-router.get("/", getAllTestimonials);
+// Get Current User Testimonials
+router.get(
+    "/",
+    getAllTestimonials
+);
 
-// Admin Route (Must be before /:id)
-router.get("/admin", protect, getAdminTestimonials);
-
-// Public Route
-router.get("/:id", validateObjectId("id"), validate, getTestimonialById);
-
-// Protected Routes
+// Create Testimonial
 router.post(
     "/",
-    protect,
     createTestimonialValidator,
     validate,
     createTestimonial
 );
 
+// Get Testimonial By ID
+router.get(
+    "/:id",
+    validateObjectId("id"),
+    validate,
+    getTestimonialById
+);
+
+// Update Testimonial
 router.put(
     "/:id",
-    protect,
     validateObjectId("id"),
     updateTestimonialValidator,
     validate,
     updateTestimonial
 );
 
+// Delete Testimonial
 router.delete(
     "/:id",
-    protect,
     validateObjectId("id"),
     validate,
     deleteTestimonial
