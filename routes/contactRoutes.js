@@ -10,7 +10,12 @@ const {
 
 const { protect } = require("../middleware/authMiddleware");
 const validate = require("../middleware/validate");
+
 const { contactValidator } = require("../validators/contactValidator");
+const {
+    updateContactValidator,
+} = require("../validators/contactUpdateValidator");
+
 const { validateObjectId } = require("../validators/commonValidator");
 
 const router = express.Router();
@@ -52,6 +57,7 @@ router.put(
     "/:id",
     protect,
     validateObjectId("id"),
+    updateContactValidator,
     validate,
     updateContact
 );

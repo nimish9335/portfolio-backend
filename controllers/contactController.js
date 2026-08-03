@@ -33,6 +33,7 @@ const getContacts = asyncHandler(async (req, res) => {
         page = 1,
         limit = 10,
         status,
+        replied,
         search,
     } = req.query;
 
@@ -40,6 +41,10 @@ const getContacts = asyncHandler(async (req, res) => {
 
     if (status) {
         filter.status = status;
+    }
+
+    if (replied !== undefined) {
+        filter.replied = replied === "true";
     }
 
     if (search) {
@@ -50,19 +55,19 @@ const getContacts = asyncHandler(async (req, res) => {
 
     const contacts = await Contact.find(filter)
         .sort({ createdAt: -1 })
-        .skip((page - 1) * limit)
+        .skip((page - 1) * Number(limit))
         .limit(Number(limit))
         .lean();
 
     const total = await Contact.countDocuments(filter);
 
-    return res.json(
+    return res.status(200).json(
         new ApiResponse(
             200,
             {
                 total,
                 page: Number(page),
-                pages: Math.ceil(total / limit),
+                pages: Math.ceil(total / Number(limit)),
                 contacts,
             },
             "Messages fetched successfully"
@@ -76,13 +81,19 @@ const getContacts = asyncHandler(async (req, res) => {
  * @access  Private (Admin)
  */
 const getContactById = asyncHandler(async (req, res) => {
-    const contact = await Contact.findById(req.params.id).lean();
+    const contact = await Contact.findById(req.params.id);
 
     if (!contact) {
         throw new ApiError(404, "Message not found");
     }
 
-    return res.json(
+    if (contact.status === "unread") {
+        contact.status = "read";
+        contact.readAt = new Date();
+        await contact.save();
+    }
+
+    return res.status(200).json(
         new ApiResponse(
             200,
             contact,
@@ -105,13 +116,11 @@ const updateContact = asyncHandler(async (req, res) => {
 
     const { status, replied } = req.body;
 
-    // Update Read Status
     if (status) {
         contact.status = status;
         contact.readAt = status === "read" ? new Date() : null;
     }
 
-    // Update Reply Status
     if (typeof replied === "boolean") {
         contact.replied = replied;
         contact.repliedAt = replied ? new Date() : null;
@@ -119,7 +128,7 @@ const updateContact = asyncHandler(async (req, res) => {
 
     await contact.save();
 
-    return res.json(
+    return res.status(200).json(
         new ApiResponse(
             200,
             contact,
@@ -142,7 +151,7 @@ const deleteContact = asyncHandler(async (req, res) => {
 
     await contact.deleteOne();
 
-    return res.json(
+    return res.status(200).json(
         new ApiResponse(
             200,
             null,
