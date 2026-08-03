@@ -86,6 +86,10 @@ const userSchema = new mongoose.Schema(
             maxlength: 20,
             default: "",
         },
+        portfolioPublished: {
+            type: Boolean,
+            default: true,
+        },
     },
     {
         timestamps: true,

@@ -74,7 +74,32 @@ const updateProfile = asyncHandler(async (req, res) => {
     );
 });
 
+const togglePortfolioVisibility = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+        throw new ApiError(404, "User not found.");
+    }
+
+    user.portfolioPublished = !user.portfolioPublished;
+
+    await user.save();
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {
+                portfolioPublished: user.portfolioPublished,
+            },
+            `Portfolio ${
+                user.portfolioPublished ? "published" : "unpublished"
+            } successfully.`
+        )
+    );
+});
+
 module.exports = {
     getProfile,
     updateProfile,
+    togglePortfolioVisibility,
 };

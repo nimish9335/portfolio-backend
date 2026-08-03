@@ -30,6 +30,7 @@ const contactRoutes = require("./routes/contactRoutes");
 const inboxRoutes = require("./routes/inboxRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const portfolioRoutes = require("./routes/portfolioRoutes");
 
 const app = express();
 
@@ -161,6 +162,9 @@ app.use(
   trackVisitor,
   settingRoutes
 );
+
+// Public Portfolio API
+app.use("/api/portfolio", apiLimiter, portfolioRoutes);
 
 app.use(
   "/api/blogs",

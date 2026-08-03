@@ -4,6 +4,7 @@ const router = express.Router();
 const {
     getProfile,
     updateProfile,
+    togglePortfolioVisibility,
 } = require("../controllers/profileController");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -23,6 +24,11 @@ router.put(
     updateProfileValidator,
     validate,
     updateProfile
+);
+router.patch(
+    "/portfolio-visibility",
+    protect,
+    togglePortfolioVisibility
 );
 
 module.exports = router;

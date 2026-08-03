@@ -509,6 +509,27 @@ Migrated the first three portfolio content modules from global single-user data 
 
 **Result:** Resume, Social Links, and Portfolio Settings are fully multi-user with private authenticated CRUD APIs.
 
+### ✅ Day 6 — Public Portfolio API + Publish/Unpublish System
+
+- Built Portfolio aggregation module
+- Added public portfolio endpoint using username
+- Aggregated all portfolio resources into a single API
+- Optimized database queries using Promise.all
+- Added master portfolio publish/unpublish functionality
+- Returned only published projects
+- Returned only active portfolio sections
+- Removed sensitive user information from public profile
+- Removed internal database fields from API response
+- Tested complete portfolio flow using Postman
+
+**Endpoints**
+
+GET /api/portfolio/:username
+
+PATCH /api/profile/portfolio-visibility
+
+**Result:** Portfolio can now be published or unpublished with a single toggle while exposing a clean public API for the frontend.
+
 ## 🗓️ Upgrade Plan (10 Days)
 
 | Day | Development Focus | Status |
@@ -518,7 +539,7 @@ Migrated the first three portfolio content modules from global single-user data 
 | Day 3 | Projects + Skills + Education Ownership Migration | ✅ |
 | Day 4 | Experience + Certifications + Testimonials | ✅ |
 | Day 5 | Resume + Social Links + Portfolio Settings | ✅ |
-| Day 6 | Public Portfolio API + Publish/Unpublish System | ⏳ |
+| Day 6 | Public Portfolio API + Publish/Unpublish System | ✅ |
 | Day 7 | Contact + Inbox + Nodemailer | ⏳ |
 | Day 8 | Multi-User Blogs + Analytics | ⏳ |
 | Day 9 | Dashboard + Security Hardening + Query Optimization | ⏳ |
