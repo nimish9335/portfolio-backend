@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 
 const {
     createResume,
@@ -7,7 +8,7 @@ const {
     deleteResume,
 } = require("../controllers/resumeController");
 
-const {protect} = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 const { pdfUpload } = require("../middleware/upload");
 const validate = require("../middleware/validate");
 
@@ -16,26 +17,31 @@ const {
     updateResumeValidator,
 } = require("../validators/resumeValidator");
 
-const { validateObjectId } = require("../validators/commonValidator");
+const {
+    validateObjectId,
+} = require("../validators/commonValidator");
 
-const router = express.Router();
+// All resume routes require authentication
+router.use(protect);
 
-// Public Route
-router.get("/", getResume);
+// Get Current User Resume
+router.get(
+    "/",
+    getResume
+);
 
-// Admin Routes
+// Upload Resume
 router.post(
     "/",
-    protect,
     pdfUpload.single("resume"),
     createResumeValidator,
     validate,
     createResume
 );
 
+// Update Resume
 router.put(
     "/:id",
-    protect,
     validateObjectId("id"),
     pdfUpload.single("resume"),
     updateResumeValidator,
@@ -43,9 +49,9 @@ router.put(
     updateResume
 );
 
+// Delete Resume
 router.delete(
     "/:id",
-    protect,
     validateObjectId("id"),
     validate,
     deleteResume

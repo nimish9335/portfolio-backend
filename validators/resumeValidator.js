@@ -5,6 +5,7 @@ const createResumeValidator = [
         .trim()
         .notEmpty()
         .withMessage("Resume title is required")
+        .bail()
         .isLength({ min: 3, max: 100 })
         .withMessage("Resume title must be between 3 and 100 characters"),
 ];

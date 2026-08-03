@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
+const userOwnership = require("../helpers/userOwnership");
 
 const settingSchema = new mongoose.Schema(
     {
+        ...userOwnership,
+
         siteTitle: {
             type: String,
             required: [true, "Site title is required"],
@@ -48,5 +51,10 @@ const settingSchema = new mongoose.Schema(
         timestamps: true,
     }
 );
+
+// One settings document per user
+settingSchema.index({
+    user: 1,
+});
 
 module.exports = mongoose.model("Setting", settingSchema);

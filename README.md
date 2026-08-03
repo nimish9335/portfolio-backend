@@ -482,6 +482,33 @@ Migrated the first three portfolio content modules from global single-user data 
 
 ---
 
+### ✅ Day 4 — Experience + Certifications + Testimonials Ownership Migration
+
+- Migrated Experience, Certification, and Testimonial modules to user ownership
+- Added ownership-oriented indexes
+- Scoped all CRUD operations to the authenticated user
+- Protected all management APIs
+- Added safe update allowlists
+- Finalized validators
+- Verified owner CRUD operations
+- Verified User A/User B data isolation
+
+**Result:** Experience, Certifications, and Testimonials are fully multi-user with private authenticated CRUD APIs.
+
+### ✅ Day 5 — Resume + Social Links + Portfolio Settings Ownership Migration
+
+- Migrated Resume, Social Links, and Portfolio Settings to user ownership
+- Implemented one active resume per user
+- Implemented one settings document per user
+- Preserved Cloudinary resume upload, versioning, and cleanup
+- Scoped all CRUD operations to the authenticated user
+- Protected all management APIs
+- Finalized validators
+- Verified owner CRUD operations
+- Verified User A/User B data isolation
+
+**Result:** Resume, Social Links, and Portfolio Settings are fully multi-user with private authenticated CRUD APIs.
+
 ## 🗓️ Upgrade Plan (10 Days)
 
 | Day | Development Focus | Status |
@@ -489,8 +516,8 @@ Migrated the first three portfolio content modules from global single-user data 
 | Day 1 | Backend Audit + User Model + Registration | ✅ |
 | Day 2 | Authentication (Access/Refresh) + Profile + Multi-User Foundation | ✅ |
 | Day 3 | Projects + Skills + Education Ownership Migration | ✅ |
-| Day 4 | Experience + Certifications + Testimonials | ⏳ |
-| Day 5 | Resume + Social Links + Portfolio Settings | ⏳ |
+| Day 4 | Experience + Certifications + Testimonials | ✅ |
+| Day 5 | Resume + Social Links + Portfolio Settings | ✅ |
 | Day 6 | Public Portfolio API + Publish/Unpublish System | ⏳ |
 | Day 7 | Contact + Inbox + Nodemailer | ⏳ |
 | Day 8 | Multi-User Blogs + Analytics | ⏳ |
@@ -543,9 +570,9 @@ Commit stable implementation
 - [x] Projects multi-user isolation
 - [x] Skills multi-user isolation
 - [x] Education multi-user isolation
-- [ ] Experience multi-user isolation
-- [ ] Certifications multi-user isolation
-- [ ] Testimonials multi-user isolation
+- [x] Experience multi-user isolation
+- [x] Certifications multi-user isolation
+- [x] Testimonials multi-user isolation
 - [ ] Remaining portfolio modules
 - [ ] Public portfolio visibility
 - [ ] User-specific contact/inbox

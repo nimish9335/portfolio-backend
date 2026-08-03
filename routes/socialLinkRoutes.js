@@ -1,9 +1,9 @@
 const express = require("express");
+const router = express.Router();
 
 const {
     createSocialLink,
     getAllSocialLinks,
-    getAdminSocialLinks,
     getSocialLinkById,
     updateSocialLink,
     deleteSocialLink,
@@ -17,44 +17,47 @@ const {
     updateSocialLinkValidator,
 } = require("../validators/socialLinkValidator");
 
-const { validateObjectId } = require("../validators/commonValidator");
+const {
+    validateObjectId,
+} = require("../validators/commonValidator");
 
-const router = express.Router();
+// All social link routes require authentication
+router.use(protect);
 
-// Public Routes
-router.get("/", getAllSocialLinks);
-
-// Admin Routes
-router.get("/admin", protect, getAdminSocialLinks);
-
+// Get Current User Social Links
 router.get(
-    "/:id",
-    protect,
-    validateObjectId("id"),
-    validate,
-    getSocialLinkById
+    "/",
+    getAllSocialLinks
 );
 
+// Create Social Link
 router.post(
     "/",
-    protect,
     createSocialLinkValidator,
     validate,
     createSocialLink
 );
 
+// Get Social Link By ID
+router.get(
+    "/:id",
+    validateObjectId("id"),
+    validate,
+    getSocialLinkById
+);
+
+// Update Social Link
 router.put(
     "/:id",
-    protect,
     validateObjectId("id"),
     updateSocialLinkValidator,
     validate,
     updateSocialLink
 );
 
+// Delete Social Link
 router.delete(
     "/:id",
-    protect,
     validateObjectId("id"),
     validate,
     deleteSocialLink

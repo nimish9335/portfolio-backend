@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
+const userOwnership = require("../helpers/userOwnership");
 
 const resumeSchema = new mongoose.Schema(
     {
+        ...userOwnership,
+
         title: {
             type: String,
             required: [true, "Resume title is required"],
@@ -42,7 +45,16 @@ const resumeSchema = new mongoose.Schema(
     }
 );
 
-// Index for faster lookup of active resume
-resumeSchema.index({ isActive: 1 });
+// One active resume per user
+resumeSchema.index({
+    user: 1,
+    isActive: 1,
+});
+
+// Fast lookup
+resumeSchema.index({
+    user: 1,
+    uploadedAt: -1,
+});
 
 module.exports = mongoose.model("Resume", resumeSchema);

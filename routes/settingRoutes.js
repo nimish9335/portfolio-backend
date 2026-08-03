@@ -1,9 +1,9 @@
 const express = require("express");
+const router = express.Router();
 
 const {
     createSetting,
     getSetting,
-    getAdminSetting,
     updateSetting,
     deleteSetting,
 } = require("../controllers/settingController");
@@ -16,36 +16,39 @@ const {
     updateSettingValidator,
 } = require("../validators/settingValidator");
 
-const { validateObjectId } = require("../validators/commonValidator");
+const {
+    validateObjectId,
+} = require("../validators/commonValidator");
 
-const router = express.Router();
+// All setting routes require authentication
+router.use(protect);
 
-// Public Route
-router.get("/", getSetting);
+// Get Current User Settings
+router.get(
+    "/",
+    getSetting
+);
 
-// Admin Routes
-router.get("/admin", protect, getAdminSetting);
-
+// Create Settings
 router.post(
     "/",
-    protect,
     createSettingValidator,
     validate,
     createSetting
 );
 
+// Update Settings
 router.put(
     "/:id",
-    protect,
     validateObjectId("id"),
     updateSettingValidator,
     validate,
     updateSetting
 );
 
+// Delete Settings
 router.delete(
     "/:id",
-    protect,
     validateObjectId("id"),
     validate,
     deleteSetting

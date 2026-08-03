@@ -1,5 +1,4 @@
 const Resume = require("../models/Resume");
-
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
@@ -9,11 +8,10 @@ const {
     deleteFromCloudinary,
 } = require("../services/cloudinary");
 
-/**
- * @desc Upload Resume
- * @route POST /api/resume
- * @access Private (Admin)
- */
+// ==============================
+// CREATE RESUME
+// ==============================
+
 const createResume = asyncHandler(async (req, res) => {
     const { title } = req.body;
 
@@ -21,7 +19,10 @@ const createResume = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Resume PDF is required");
     }
 
-    const existingResume = await Resume.findOne({ isActive: true });
+    const existingResume = await Resume.findOne({
+        user: req.user._id,
+        isActive: true,
+    });
 
     if (existingResume) {
         await deleteFromCloudinary(existingResume.file.public_id);
@@ -35,6 +36,7 @@ const createResume = asyncHandler(async (req, res) => {
     );
 
     const resume = await Resume.create({
+        user: req.user._id,
         title,
         file: {
             url: uploadedFile.secure_url,
@@ -45,43 +47,55 @@ const createResume = asyncHandler(async (req, res) => {
     });
 
     return res.status(201).json(
-        new ApiResponse(201, resume, "Resume uploaded successfully")
+        new ApiResponse(
+            201,
+            resume,
+            "Resume uploaded successfully"
+        )
     );
 });
 
-/**
- * @desc Get Active Resume
- * @route GET /api/resume
- * @access Public
- */
+// ==============================
+// GET CURRENT USER RESUME
+// ==============================
+
 const getResume = asyncHandler(async (req, res) => {
-    const resume = await Resume.findOne({ isActive: true }).lean();
+    const resume = await Resume.findOne({
+        user: req.user._id,
+        isActive: true,
+    }).lean();
 
     if (!resume) {
         throw new ApiError(404, "Resume not found");
     }
 
-    return res
-        .status(200)
-        .json(new ApiResponse(200, resume, "Resume fetched successfully"));
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            resume,
+            "Resume fetched successfully"
+        )
+    );
 });
 
-/**
- * @desc Update Resume
- * @route PUT /api/resume/:id
- * @access Private (Admin)
- */
+// ==============================
+// UPDATE RESUME
+// ==============================
+
 const updateResume = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { title } = req.body;
 
-    const resume = await Resume.findById(id);
+    const resume = await Resume.findOne({
+        _id: id,
+        user: req.user._id,
+    });
 
     if (!resume) {
         throw new ApiError(404, "Resume not found");
     }
 
-    if (title) {
+    if (title !== undefined) {
         resume.title = title;
     }
 
@@ -105,20 +119,26 @@ const updateResume = asyncHandler(async (req, res) => {
 
     await resume.save();
 
-    return res
-        .status(200)
-        .json(new ApiResponse(200, resume, "Resume updated successfully"));
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            resume,
+            "Resume updated successfully"
+        )
+    );
 });
 
-/**
- * @desc Delete Resume
- * @route DELETE /api/resume/:id
- * @access Private (Admin)
- */
+// ==============================
+// DELETE RESUME
+// ==============================
+
 const deleteResume = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
-    const resume = await Resume.findById(id);
+    const resume = await Resume.findOne({
+        _id: id,
+        user: req.user._id,
+    });
 
     if (!resume) {
         throw new ApiError(404, "Resume not found");
@@ -128,9 +148,13 @@ const deleteResume = asyncHandler(async (req, res) => {
 
     await resume.deleteOne();
 
-    return res
-        .status(200)
-        .json(new ApiResponse(200, null, "Resume deleted successfully"));
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            null,
+            "Resume deleted successfully"
+        )
+    );
 });
 
 module.exports = {

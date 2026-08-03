@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
+const userOwnership = require("../helpers/userOwnership");
 
 const socialLinkSchema = new mongoose.Schema(
     {
+        ...userOwnership,
+
         platform: {
             type: String,
             required: [true, "Platform name is required"],
@@ -37,10 +40,16 @@ const socialLinkSchema = new mongoose.Schema(
     }
 );
 
-// Faster sorting
-socialLinkSchema.index({ order: 1 });
+// User specific sorting
+socialLinkSchema.index({
+    user: 1,
+    order: 1,
+});
 
-// Faster public queries
-socialLinkSchema.index({ isActive: 1 });
+// Fast lookup
+socialLinkSchema.index({
+    user: 1,
+    isActive: 1,
+});
 
 module.exports = mongoose.model("SocialLink", socialLinkSchema);
