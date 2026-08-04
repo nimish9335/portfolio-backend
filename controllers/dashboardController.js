@@ -12,36 +12,9 @@ const asyncHandler = require("../utils/asyncHandler");
 const ApiResponse = require("../utils/ApiResponse");
 
 const getDashboardSummary = asyncHandler(async (req, res) => {
-  const [
-    projects,
-    blogs,
-    skills,
-    experience,
-    education,
-    certifications,
-    testimonials,
-    contacts,
-    unreadMessages,
-    visitors,
-    pageViews,
-  ] = await Promise.all([
-    Project.countDocuments(),
-    Blog.countDocuments(),
-    Skill.countDocuments(),
-    Experience.countDocuments(),
-    Education.countDocuments(),
-    Certification.countDocuments(),
-    Testimonial.countDocuments(),
-    Contact.countDocuments(),
-    Contact.countDocuments({ status: "unread" }),
-    Visitor.countDocuments(),
-    Visitor.countDocuments(),
-  ]);
+    const filter = { user: req.user._id };
 
-  return res.status(200).json(
-    new ApiResponse(
-      200,
-      {
+    const [
         projects,
         blogs,
         skills,
@@ -53,118 +26,157 @@ const getDashboardSummary = asyncHandler(async (req, res) => {
         unreadMessages,
         visitors,
         pageViews,
-      },
-      "Dashboard summary fetched successfully"
-    )
-  );
+    ] = await Promise.all([
+        Project.countDocuments(filter),
+        Blog.countDocuments(filter),
+        Skill.countDocuments(filter),
+        Experience.countDocuments(filter),
+        Education.countDocuments(filter),
+        Certification.countDocuments(filter),
+        Testimonial.countDocuments(filter),
+        Contact.countDocuments(filter),
+        Contact.countDocuments({
+            ...filter,
+            status: "unread",
+        }),
+        Visitor.countDocuments(filter),
+        Visitor.countDocuments(filter),
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {
+                projects,
+                blogs,
+                skills,
+                experience,
+                education,
+                certifications,
+                testimonials,
+                contacts,
+                unreadMessages,
+                visitors,
+                pageViews,
+            },
+            "Dashboard summary fetched successfully"
+        )
+    );
 });
 
 const getRecentActivity = asyncHandler(async (req, res) => {
-  const [recentProjects, recentBlogs, recentMessages] = await Promise.all([
-    Project.find()
-      .sort({ createdAt: -1 })
-      .limit(5)
-      .select("title slug createdAt"),
+    const filter = { user: req.user._id };
 
-    Blog.find()
-      .sort({ createdAt: -1 })
-      .limit(5)
-      .select("title slug createdAt"),
+    const [recentProjects, recentBlogs, recentMessages] = await Promise.all([
+        Project.find(filter)
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .select("title slug createdAt"),
 
-    Contact.find()
-      .sort({ createdAt: -1 })
-      .limit(5)
-      .select("name email subject status createdAt"),
-  ]);
+        Blog.find(filter)
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .select("title slug createdAt"),
 
-  return res.status(200).json(
-    new ApiResponse(
-      200,
-      {
-        recentProjects,
-        recentBlogs,
-        recentMessages,
-      },
-      "Recent dashboard activity fetched successfully"
-    )
-  );
+        Contact.find(filter)
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .select("name email subject status createdAt"),
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {
+                recentProjects,
+                recentBlogs,
+                recentMessages,
+            },
+            "Recent dashboard activity fetched successfully"
+        )
+    );
 });
 
 const getDashboard = asyncHandler(async (req, res) => {
-  const [
-    projects,
-    blogs,
-    skills,
-    experience,
-    education,
-    certifications,
-    testimonials,
-    contacts,
-    unreadMessages,
-    visitors,
-    pageViews,
-    recentProjects,
-    recentBlogs,
-    recentMessages,
-  ] = await Promise.all([
-    Project.countDocuments(),
-    Blog.countDocuments(),
-    Skill.countDocuments(),
-    Experience.countDocuments(),
-    Education.countDocuments(),
-    Certification.countDocuments(),
-    Testimonial.countDocuments(),
-    Contact.countDocuments(),
-    Contact.countDocuments({ status: "unread" }),
-    Visitor.countDocuments(),
-    Visitor.countDocuments(),
+    const filter = { user: req.user._id };
 
-    Project.find()
-      .sort({ createdAt: -1 })
-      .limit(5)
-      .select("title slug createdAt"),
+    const [
+        projects,
+        blogs,
+        skills,
+        experience,
+        education,
+        certifications,
+        testimonials,
+        contacts,
+        unreadMessages,
+        visitors,
+        pageViews,
+        recentProjects,
+        recentBlogs,
+        recentMessages,
+    ] = await Promise.all([
+        Project.countDocuments(filter),
+        Blog.countDocuments(filter),
+        Skill.countDocuments(filter),
+        Experience.countDocuments(filter),
+        Education.countDocuments(filter),
+        Certification.countDocuments(filter),
+        Testimonial.countDocuments(filter),
+        Contact.countDocuments(filter),
+        Contact.countDocuments({
+            ...filter,
+            status: "unread",
+        }),
+        Visitor.countDocuments(filter),
+        Visitor.countDocuments(filter),
 
-    Blog.find()
-      .sort({ createdAt: -1 })
-      .limit(5)
-      .select("title slug createdAt"),
+        Project.find(filter)
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .select("title slug createdAt"),
 
-    Contact.find()
-      .sort({ createdAt: -1 })
-      .limit(5)
-      .select("name email subject status createdAt"),
-  ]);
+        Blog.find(filter)
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .select("title slug createdAt"),
 
-  return res.status(200).json(
-    new ApiResponse(
-      200,
-      {
-        summary: {
-          projects,
-          blogs,
-          skills,
-          experience,
-          education,
-          certifications,
-          testimonials,
-          contacts,
-          unreadMessages,
-          visitors,
-          pageViews,
-        },
-        recentActivity: {
-          recentProjects,
-          recentBlogs,
-          recentMessages,
-        },
-      },
-      "Dashboard data fetched successfully"
-    )
-  );
+        Contact.find(filter)
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .select("name email subject status createdAt"),
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            {
+                summary: {
+                    projects,
+                    blogs,
+                    skills,
+                    experience,
+                    education,
+                    certifications,
+                    testimonials,
+                    contacts,
+                    unreadMessages,
+                    visitors,
+                    pageViews,
+                },
+                recentActivity: {
+                    recentProjects,
+                    recentBlogs,
+                    recentMessages,
+                },
+            },
+            "Dashboard data fetched successfully"
+        )
+    );
 });
 
 module.exports = {
-  getDashboardSummary,
-  getRecentActivity,
-  getDashboard,
+    getDashboardSummary,
+    getRecentActivity,
+    getDashboard,
 };
