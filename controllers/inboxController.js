@@ -8,6 +8,10 @@ const ApiResponse = require("../utils/ApiResponse");
  * @access  Private
  */
 const getDashboard = asyncHandler(async (req, res) => {
+    const filter = {
+        user: req.user._id,
+    };
+
     const [
         totalMessages,
         unreadMessages,
@@ -16,12 +20,29 @@ const getDashboard = asyncHandler(async (req, res) => {
         pendingReplies,
         recentMessages,
     ] = await Promise.all([
-        Contact.countDocuments(),
-        Contact.countDocuments({ status: "unread" }),
-        Contact.countDocuments({ status: "read" }),
-        Contact.countDocuments({ replied: true }),
-        Contact.countDocuments({ replied: false }),
-        Contact.find()
+        Contact.countDocuments(filter),
+
+        Contact.countDocuments({
+            ...filter,
+            status: "unread",
+        }),
+
+        Contact.countDocuments({
+            ...filter,
+            status: "read",
+        }),
+
+        Contact.countDocuments({
+            ...filter,
+            replied: true,
+        }),
+
+        Contact.countDocuments({
+            ...filter,
+            replied: false,
+        }),
+
+        Contact.find(filter)
             .sort({ createdAt: -1 })
             .limit(5)
             .lean(),
@@ -34,6 +55,8 @@ const getDashboard = asyncHandler(async (req, res) => {
                 totalMessages,
                 unreadMessages,
                 readMessages,
+                repliedMessages,
+                pendingReplies,
                 recentMessages,
             },
             "Dashboard fetched successfully"
@@ -47,7 +70,9 @@ const getDashboard = asyncHandler(async (req, res) => {
  * @access  Private
  */
 const getRecentMessages = asyncHandler(async (req, res) => {
-    const messages = await Contact.find()
+    const messages = await Contact.find({
+        user: req.user._id,
+    })
         .sort({ createdAt: -1 })
         .limit(10)
         .lean();
@@ -67,6 +92,10 @@ const getRecentMessages = asyncHandler(async (req, res) => {
  * @access  Private
  */
 const getInboxStats = asyncHandler(async (req, res) => {
+    const filter = {
+        user: req.user._id,
+    };
+
     const [
         totalMessages,
         unreadMessages,
@@ -74,11 +103,27 @@ const getInboxStats = asyncHandler(async (req, res) => {
         repliedMessages,
         pendingReplies,
     ] = await Promise.all([
-        Contact.countDocuments(),
-        Contact.countDocuments({ status: "unread" }),
-        Contact.countDocuments({ status: "read" }),
-        Contact.countDocuments({ replied: true }),
-        Contact.countDocuments({ replied: false }),
+        Contact.countDocuments(filter),
+
+        Contact.countDocuments({
+            ...filter,
+            status: "unread",
+        }),
+
+        Contact.countDocuments({
+            ...filter,
+            status: "read",
+        }),
+
+        Contact.countDocuments({
+            ...filter,
+            replied: true,
+        }),
+
+        Contact.countDocuments({
+            ...filter,
+            replied: false,
+        }),
     ]);
 
     return res.status(200).json(
@@ -104,6 +149,7 @@ const getInboxStats = asyncHandler(async (req, res) => {
 const markAllAsRead = asyncHandler(async (req, res) => {
     await Contact.updateMany(
         {
+            user: req.user._id,
             status: "unread",
         },
         {
@@ -131,6 +177,7 @@ const bulkMarkAsRead = asyncHandler(async (req, res) => {
 
     await Contact.updateMany(
         {
+            user: req.user._id,
             _id: { $in: ids },
         },
         {
@@ -157,6 +204,7 @@ const bulkDeleteMessages = asyncHandler(async (req, res) => {
     const { ids } = req.body;
 
     await Contact.deleteMany({
+        user: req.user._id,
         _id: { $in: ids },
     });
 
