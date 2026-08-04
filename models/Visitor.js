@@ -1,76 +1,84 @@
 const mongoose = require("mongoose");
 
 const visitorSchema = new mongoose.Schema(
-  {
-    ip: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+            index: true,
+        },
 
-    country: {
-      type: String,
-      default: "Unknown",
-      trim: true,
-    },
+        ip: {
+            type: String,
+            required: true,
+            trim: true,
+        },
 
-    city: {
-      type: String,
-      default: "Unknown",
-      trim: true,
-    },
+        country: {
+            type: String,
+            default: "Unknown",
+            trim: true,
+        },
 
-    browser: {
-      type: String,
-      default: "Unknown",
-      trim: true,
-    },
+        city: {
+            type: String,
+            default: "Unknown",
+            trim: true,
+        },
 
-    os: {
-      type: String,
-      default: "Unknown",
-      trim: true,
-    },
+        browser: {
+            type: String,
+            default: "Unknown",
+            trim: true,
+        },
 
-    device: {
-      type: String,
-      enum: ["Desktop", "Mobile", "Tablet", "Bot", "Unknown"],
-      default: "Unknown",
-    },
+        os: {
+            type: String,
+            default: "Unknown",
+            trim: true,
+        },
 
-    page: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+        device: {
+            type: String,
+            enum: ["Desktop", "Mobile", "Tablet", "Bot", "Unknown"],
+            default: "Unknown",
+        },
 
-    referrer: {
-      type: String,
-      default: "Direct",
-      trim: true,
-    },
+        page: {
+            type: String,
+            required: true,
+            trim: true,
+        },
 
-    userAgent: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+        referrer: {
+            type: String,
+            default: "Direct",
+            trim: true,
+        },
 
-    visitedAt: {
-      type: Date,
-      default: Date.now,
-      index: true,
+        userAgent: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+
+        visitedAt: {
+            type: Date,
+            default: Date.now,
+            index: true,
+        },
     },
-  },
-  {
-    timestamps: true,
-  }
+    {
+        timestamps: true,
+    }
 );
 
-visitorSchema.index({ page: 1 });
-visitorSchema.index({ country: 1 });
-visitorSchema.index({ browser: 1 });
-visitorSchema.index({ device: 1 });
-visitorSchema.index({ visitedAt: -1 });
+// Performance Indexes
+visitorSchema.index({ user: 1, visitedAt: -1 });
+visitorSchema.index({ user: 1, page: 1 });
+visitorSchema.index({ user: 1, browser: 1 });
+visitorSchema.index({ user: 1, device: 1 });
+visitorSchema.index({ user: 1, country: 1 });
 
 module.exports = mongoose.model("Visitor", visitorSchema);

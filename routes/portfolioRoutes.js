@@ -1,11 +1,15 @@
 const express = require("express");
+
+const { getPublicPortfolio } = require("../controllers/portfolioController");
+const trackVisitor = require("../middleware/analyticsMiddleware");
+
 const router = express.Router();
 
-const {
-    getPublicPortfolio,
-} = require("../controllers/portfolioController");
-
 // Public Portfolio
-router.get("/:username", getPublicPortfolio);
+router.get(
+    "/:username",
+    trackVisitor,
+    getPublicPortfolio
+);
 
 module.exports = router;
