@@ -1,7 +1,7 @@
 {
   "name": "portfolio-backend",
   "version": "1.0.0",
-  "description": "Production-ready backend for my Full Stack Portfolio built with Node.js, Express.js, MongoDB, JWT, Cloudinary, and modern backend architecture.",
+  "description": "Production-ready Multi-User Portfolio CMS Backend built with Node.js, Express.js, MongoDB, JWT Authentication, Cloudinary, and REST APIs.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -10,16 +10,28 @@
   },
   "keywords": [
     "portfolio",
+    "portfolio-cms",
+    "multi-user",
     "backend",
     "nodejs",
     "express",
     "mongodb",
+    "mongoose",
     "jwt",
+    "rest-api",
     "cloudinary",
-    "rest-api"
+    "cms"
   ],
   "author": "Nimish Patel",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nimish9335/portfolio-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nimish9335/portfolio-backend/issues"
+  },
+  "homepage": "https://github.com/nimish9335/portfolio-backend",
   "engines": {
     "node": ">=18"
   },

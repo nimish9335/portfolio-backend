@@ -1,33 +1,39 @@
 const cors = require("cors");
 
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    "http://localhost:5173",
+    "http://localhost:3000",
+].filter(Boolean);
+
 const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      process.env.CLIENT_URL,
-      "http://localhost:5173",
-      "http://localhost:3000",
-    ];
+    origin(origin, callback) {
+        if (!origin) {
+            return callback(null, true);
+        }
 
-    // Allow requests with no origin (Postman, mobile apps, etc.)
-    if (!origin) {
-      return callback(null, true);
-    }
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
+        return callback(new Error("Not allowed by CORS"));
+    },
 
-    return callback(new Error("Not allowed by CORS"));
-  },
+    credentials: true,
 
-  credentials: true,
+    methods: [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS",
+    ],
 
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-  ],
+    allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+    ],
 };
 
 module.exports = cors(corsOptions);

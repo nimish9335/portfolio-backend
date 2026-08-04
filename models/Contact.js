@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
+const userOwnership = require("../helpers/userOwnership");
 
 const contactSchema = new mongoose.Schema(
     {
+        ...userOwnership,
+
         name: {
             type: String,
             required: true,
@@ -58,15 +61,17 @@ const contactSchema = new mongoose.Schema(
     }
 );
 
-// Text Search Index
+// Text Search
 contactSchema.index({
     name: "text",
     subject: "text",
     message: "text",
 });
 
-// Query Optimization Indexes
-contactSchema.index({ createdAt: -1 });
-contactSchema.index({ email: 1 });
+// Performance Indexes
+contactSchema.index({ user: 1, createdAt: -1 });
+contactSchema.index({ user: 1, status: 1 });
+contactSchema.index({ user: 1, replied: 1 });
+contactSchema.index({ user: 1, email: 1 });
 
 module.exports = mongoose.model("Contact", contactSchema);

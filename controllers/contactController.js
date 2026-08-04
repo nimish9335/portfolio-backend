@@ -1,4 +1,6 @@
 const Contact = require("../models/Contact");
+const User = require("../models/User");
+
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
@@ -9,9 +11,16 @@ const ApiResponse = require("../utils/ApiResponse");
  * @access  Public
  */
 const createContact = asyncHandler(async (req, res) => {
-    const { name, email, subject, message } = req.body;
+    const { username, name, email, subject, message } = req.body;
+
+    const owner = await User.findOne({ username }).select("_id");
+
+    if (!owner) {
+        throw new ApiError(404, "Portfolio owner not found");
+    }
 
     const contact = await Contact.create({
+        user: owner._id,
         name,
         email,
         subject,
@@ -26,7 +35,7 @@ const createContact = asyncHandler(async (req, res) => {
 /**
  * @desc    Get All Messages
  * @route   GET /api/contact
- * @access  Private (Admin)
+ * @access  Private
  */
 const getContacts = asyncHandler(async (req, res) => {
     const {
@@ -37,7 +46,9 @@ const getContacts = asyncHandler(async (req, res) => {
         search,
     } = req.query;
 
-    const filter = {};
+    const filter = {
+        user: req.user._id,
+    };
 
     if (status) {
         filter.status = status;
@@ -55,7 +66,7 @@ const getContacts = asyncHandler(async (req, res) => {
 
     const contacts = await Contact.find(filter)
         .sort({ createdAt: -1 })
-        .skip((page - 1) * Number(limit))
+        .skip((Number(page) - 1) * Number(limit))
         .limit(Number(limit))
         .lean();
 
@@ -78,10 +89,13 @@ const getContacts = asyncHandler(async (req, res) => {
 /**
  * @desc    Get Single Message
  * @route   GET /api/contact/:id
- * @access  Private (Admin)
+ * @access  Private
  */
 const getContactById = asyncHandler(async (req, res) => {
-    const contact = await Contact.findById(req.params.id);
+    const contact = await Contact.findOne({
+        _id: req.params.id,
+        user: req.user._id,
+    });
 
     if (!contact) {
         throw new ApiError(404, "Message not found");
@@ -94,21 +108,20 @@ const getContactById = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(
-            200,
-            contact,
-            "Message fetched successfully"
-        )
+        new ApiResponse(200, contact, "Message fetched successfully")
     );
 });
 
 /**
- * @desc    Update Message Status
+ * @desc    Update Message
  * @route   PUT /api/contact/:id
- * @access  Private (Admin)
+ * @access  Private
  */
 const updateContact = asyncHandler(async (req, res) => {
-    const contact = await Contact.findById(req.params.id);
+    const contact = await Contact.findOne({
+        _id: req.params.id,
+        user: req.user._id,
+    });
 
     if (!contact) {
         throw new ApiError(404, "Message not found");
@@ -129,21 +142,20 @@ const updateContact = asyncHandler(async (req, res) => {
     await contact.save();
 
     return res.status(200).json(
-        new ApiResponse(
-            200,
-            contact,
-            "Message updated successfully"
-        )
+        new ApiResponse(200, contact, "Message updated successfully")
     );
 });
 
 /**
  * @desc    Delete Message
  * @route   DELETE /api/contact/:id
- * @access  Private (Admin)
+ * @access  Private
  */
 const deleteContact = asyncHandler(async (req, res) => {
-    const contact = await Contact.findById(req.params.id);
+    const contact = await Contact.findOne({
+        _id: req.params.id,
+        user: req.user._id,
+    });
 
     if (!contact) {
         throw new ApiError(404, "Message not found");
@@ -152,11 +164,7 @@ const deleteContact = asyncHandler(async (req, res) => {
     await contact.deleteOne();
 
     return res.status(200).json(
-        new ApiResponse(
-            200,
-            null,
-            "Message deleted successfully"
-        )
+        new ApiResponse(200, null, "Message deleted successfully")
     );
 });
 
