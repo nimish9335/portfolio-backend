@@ -1,7 +1,10 @@
 const Blog = require("../models/Blog");
+const User = require("../models/User");
+
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
+
 const cloudinary = require("../services/cloudinary");
 
 /**
@@ -30,7 +33,10 @@ const createBlog = asyncHandler(async (req, res) => {
         seoDescription,
     } = req.body;
 
-    const exists = await Blog.findOne({ slug });
+    const exists = await Blog.findOne({
+        user: req.user._id,
+        slug,
+    });
 
     if (exists) {
         throw new ApiError(400, "Slug already exists");
@@ -51,6 +57,7 @@ const createBlog = asyncHandler(async (req, res) => {
     }
 
     const blog = await Blog.create({
+        user: req.user._id,
         title,
         slug,
         excerpt,
@@ -72,9 +79,22 @@ const createBlog = asyncHandler(async (req, res) => {
 });
 
 /**
- * Public Blogs
+ * Public Blogs By Username
  */
 const getBlogs = asyncHandler(async (req, res) => {
+    const { username } = req.params;
+
+    const user = await User.findOne({
+        username,
+        portfolioPublished: true,
+    })
+    .select("_id")
+    .lean();
+
+    if (!user) {
+        throw new ApiError(404, "Portfolio not found");
+    }
+
     const {
         page = 1,
         limit = 10,
@@ -84,6 +104,7 @@ const getBlogs = asyncHandler(async (req, res) => {
     } = req.query;
 
     const filter = {
+        user: user._id,
         status: "published",
     };
 
@@ -98,20 +119,21 @@ const getBlogs = asyncHandler(async (req, res) => {
     }
 
     const blogs = await Blog.find(filter)
+        .select("-user -__v")
         .sort({ publishedAt: -1 })
-        .skip((page - 1) * limit)
+        .skip((page - 1) * Number(limit))
         .limit(Number(limit))
         .lean();
 
     const total = await Blog.countDocuments(filter);
 
-    return res.json(
+    return res.status(200).json(
         new ApiResponse(
             200,
             {
                 total,
                 page: Number(page),
-                pages: Math.ceil(total / limit),
+                pages: Math.ceil(total / Number(limit)),
                 blogs,
             },
             "Blogs fetched successfully"
@@ -123,11 +145,13 @@ const getBlogs = asyncHandler(async (req, res) => {
  * Admin Blogs
  */
 const getAdminBlogs = asyncHandler(async (req, res) => {
-    const blogs = await Blog.find()
-    .sort({ createdAt: -1 })
-    .lean();
+    const blogs = await Blog.find({
+        user: req.user._id,
+    })
+        .sort({ createdAt: -1 })
+        .lean();
 
-    return res.json(
+    return res.status(200).json(
         new ApiResponse(
             200,
             blogs,
@@ -140,9 +164,22 @@ const getAdminBlogs = asyncHandler(async (req, res) => {
  * Get Blog By Slug
  */
 const getBlogBySlug = asyncHandler(async (req, res) => {
+    const { username, slug } = req.params;
+
+    const user = await User.findOne({
+        username,
+        portfolioPublished: true,
+    })
+    .select("_id")
+    .lean();
+
+    if (!user) {
+        throw new ApiError(404, "Portfolio not found");
+    }
 
     const blog = await Blog.findOne({
-        slug: req.params.slug,
+        user: user._id,
+        slug,
         status: "published",
     });
 
@@ -153,7 +190,7 @@ const getBlogBySlug = asyncHandler(async (req, res) => {
     blog.views += 1;
     await blog.save();
 
-    return res.json(
+    return res.status(200).json(
         new ApiResponse(
             200,
             blog,
@@ -166,17 +203,20 @@ const getBlogBySlug = asyncHandler(async (req, res) => {
  * Update Blog
  */
 const updateBlog = asyncHandler(async (req, res) => {
-
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findOne({
+        _id: req.params.id,
+        user: req.user._id,
+    });
 
     if (!blog) {
         throw new ApiError(404, "Blog not found");
     }
 
     if (req.file) {
-
         if (blog.featuredImage?.public_id) {
-            await cloudinary.deleteImage(blog.featuredImage.public_id);
+            await cloudinary.deleteImage(
+                blog.featuredImage.public_id
+            );
         }
 
         const uploaded = await cloudinary.uploadImage(
@@ -203,7 +243,7 @@ const updateBlog = asyncHandler(async (req, res) => {
 
     await blog.save();
 
-    return res.json(
+    return res.status(200).json(
         new ApiResponse(
             200,
             blog,
@@ -216,8 +256,10 @@ const updateBlog = asyncHandler(async (req, res) => {
  * Delete Blog
  */
 const deleteBlog = asyncHandler(async (req, res) => {
-
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findOne({
+        _id: req.params.id,
+        user: req.user._id,
+    });
 
     if (!blog) {
         throw new ApiError(404, "Blog not found");
@@ -231,7 +273,7 @@ const deleteBlog = asyncHandler(async (req, res) => {
 
     await blog.deleteOne();
 
-    return res.json(
+    return res.status(200).json(
         new ApiResponse(
             200,
             null,

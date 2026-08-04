@@ -18,17 +18,6 @@ const { validateObjectId } = require("../validators/commonValidator");
 
 const router = express.Router();
 
-/*
-|--------------------------------------------------------------------------
-| Public Routes
-|--------------------------------------------------------------------------
-*/
-
-router.get("/", getBlogs);
-
-router.get("/admin/all", protect, getAdminBlogs);
-
-router.get("/:slug", getBlogBySlug);
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +25,10 @@ router.get("/:slug", getBlogBySlug);
 |--------------------------------------------------------------------------
 */
 
+// Admin blogs
+router.get("/admin/all", protect, getAdminBlogs);
+
+// Create
 router.post(
     "/",
     protect,
@@ -45,6 +38,7 @@ router.post(
     createBlog
 );
 
+// Update
 router.put(
     "/:id",
     protect,
@@ -55,6 +49,7 @@ router.put(
     updateBlog
 );
 
+// Delete
 router.delete(
     "/:id",
     protect,
@@ -62,5 +57,17 @@ router.delete(
     validate,
     deleteBlog
 );
+
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
+
+// Public blogs of a portfolio
+router.get("/:username", getBlogs);
+
+// Single public blog
+router.get("/:username/:slug", getBlogBySlug);
 
 module.exports = router;

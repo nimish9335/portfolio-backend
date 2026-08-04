@@ -2,6 +2,13 @@ const mongoose = require("mongoose");
 
 const blogSchema = new mongoose.Schema(
     {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+            index: true,
+        },
+
         title: {
             type: String,
             required: true,
@@ -12,7 +19,6 @@ const blogSchema = new mongoose.Schema(
         slug: {
             type: String,
             required: true,
-            unique: true,
             lowercase: true,
             trim: true,
         },
@@ -99,10 +105,16 @@ const blogSchema = new mongoose.Schema(
     }
 );
 
-blogSchema.index({ title: "text", content: "text" });
+// Search Index
+blogSchema.index({
+    title: "text",
+    content: "text",
+});
 
+// Performance Indexes
+blogSchema.index({ user: 1, status: 1 });
+blogSchema.index({ user: 1, slug: 1 }, { unique: true });
 blogSchema.index({ category: 1 });
-
 blogSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model("Blog", blogSchema);

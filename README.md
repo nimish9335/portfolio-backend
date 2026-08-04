@@ -530,6 +530,32 @@ PATCH /api/profile/portfolio-visibility
 
 **Result:** Portfolio can now be published or unpublished with a single toggle while exposing a clean public API for the frontend.
 
+### ✅ Day 7 — Multi-User Blog Module
+
+- Migrated blog module to multi-user architecture
+- Linked blogs with authenticated users
+- Implemented username-based public blog endpoints
+- Added owner-specific slug uniqueness
+- Restricted admin operations to blog owners
+- Added public blog listing and blog detail APIs
+- Implemented automatic view counter
+- Supported draft and published blog workflow
+- Verified complete CRUD functionality using Postman
+
+**Endpoints**
+
+GET /api/blogs/:username
+
+GET /api/blogs/:username/:slug
+
+GET /api/blogs/admin/all
+
+POST /api/blogs
+
+PUT /api/blogs/:id
+
+DELETE /api/blogs/:id
+
 ## 🗓️ Upgrade Plan (10 Days)
 
 | Day | Development Focus | Status |
